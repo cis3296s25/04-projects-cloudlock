@@ -1,5 +1,5 @@
 # Cloud Lock
-ProjectLock is an application that uses secure file and image encryption systems. It uses Python and its libraries, such as TkInter, QRCode, and PIL.
+CloudLock is an application that uses secure file and image encryption systems. It uses Python and its libraries, such as TkInter, QRCode, and PIL.
 
 ![This is a screenshot.](images.png)
 # How to run
