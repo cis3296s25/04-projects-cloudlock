@@ -4,17 +4,11 @@ Adding an screenshot or a mockup of your application in action would be nice.
 
 ![This is a screenshot.](images.png)
 # How to run
-Provide here instructions on how to use your application.   
-- Download the latest binary from the Release section on the right on GitHub.  
-- On the command line uncompress using
-```
-tar -xzf  
-```
-- On the command line run with
-```
-./hello
-```
-- You will see Hello World! on your terminal. 
+ -Run the program and enter your credentials to log in.
+ -Select the option to encrypt or decrypt a file.
+ -Choose the file and enter the private key.
+ -Press the button to process the file.
+ -Choose whether to store the encrypted file in the cloud or download it on your local machine.
 
 # How to contribute
 Follow this project board to know the latest status of the project: [http://...]([http://...])  
