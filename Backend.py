@@ -17,8 +17,10 @@ def checkingFileType(filePath):
 
 def correctFileForTest(filePath):
     fileName = checkingFileType(filePath)
+
     if(fileName == "text"):
-        #ADD STUFF
-        return
+        return True
+    else:
+        return False
 
 checkingFileType(#ADD FILENAME FUNCTION FROM TIMOFEI)
