@@ -63,6 +63,8 @@ class TokenView(Frame):
 global_view_list.append(QrView)
 global_view_list.append(TokenView)
 
+# def switch_layout(root : Frame, index : int) :
+#     global_view_list[index](index)
 
 
 
@@ -82,7 +84,7 @@ holder = Frame(root)
 holder.grid(sticky="nesw")
 holder.columnconfigure(0, weight=1)
 
-QrView(holder)
+QrView(root)
 
 
 
