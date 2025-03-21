@@ -3,6 +3,12 @@ CloudLock is an application that uses secure file and image encryption systems. 
 
 ![This is a screenshot.](images.png)
 # How to run
+    ```
+    source .venv/bin/activate
+    pip install -r .venv/Requirements.txt
+    python UserInterface.py
+    ```
+
  -Run the program and enter your credentials to log in.
  -Select the option to encrypt or decrypt a file.
  -Choose the file and enter the private key.
