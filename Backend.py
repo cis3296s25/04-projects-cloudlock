@@ -1,4 +1,4 @@
-from GUI import * #means from a specific python file, import all its functions
+#means from a specific python file, import all its functions
 import os.path
 
 def checkingFileType(filePath):
@@ -12,18 +12,19 @@ def checkingFileType(filePath):
             #for each key value pair...
             #if it matches a value in our dictionary, return the key which is the file type
             if(filePath.lower().endswith(fileType)):
-                print(fileName)
                 return fileName
 
 
 def correctFileForTest(filePath):
-    filePathTemp = filePath.get()
-    fileName = checkingFileType(filePathTemp)
+    fileName = checkingFileType(filePath)
 
     if(fileName == "text"):
-        print("true")
         return True
     else:
         return False
 
-correctFileForTest(file_path_entry)
+def encryptingFile(filePath):
+    if(correctFileForTest(filePath)):
+
+
+correctFileForTest("C:\\Users\\Salwa\\Downloads\\seq2.txt")

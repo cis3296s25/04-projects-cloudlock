@@ -62,7 +62,7 @@
       <updated>1742516633715</updated>
       <workItem from="1742516637940" duration="3073000" />
       <workItem from="1742527628874" duration="140000" />
-      <workItem from="1742569560315" duration="1596000" />
+      <workItem from="1742569560315" duration="5915000" />
     </task>
     <servers />
   </component>
@@ -70,7 +70,7 @@
     <option name="version" value="3" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/04_projects_cloudlock$GUI.coverage" NAME="GUI Coverage Results" MODIFIED="1742569688735" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/04_projects_cloudlock$Backend.coverage" NAME="Backend Coverage Results" MODIFIED="1742570314948" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/04_projects_cloudlock$GUI.coverage" NAME="GUI Coverage Results" MODIFIED="1742574099452" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/04_projects_cloudlock$Backend.coverage" NAME="Backend Coverage Results" MODIFIED="1742574805988" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
