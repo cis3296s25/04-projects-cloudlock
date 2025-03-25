@@ -8,21 +8,25 @@ CloudLock is an application that uses secure file and image encryption systems. 
 
 - Initialize virtual enviroment
 
-```bash
-python -m venv .venv
-```
+  ```bash
+  python -m venv .venv
+  ```
 
 - (Linux Only)Activate the virtual environment:
   ```bash
   source .venv/bin/activate
   ```
+- (Windows Only) Activate the virtual enviroment:
+  ```bash
+  .venv/Scripts/activate
+  ```
 - Download packages:
   ```bash
-  pip install -r .venv/Requirements.txt
+  pip install -r ./Requirements.txt
   ```
 - Run the application:
   ```bash
-  python UserInterface.py
+  python main.py
   ```
 - Complete Google two-factor authentication to log in.
 - Select the option to encrypt or decrypt a file.
