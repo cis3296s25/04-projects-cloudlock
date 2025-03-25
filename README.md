@@ -16,7 +16,7 @@ CloudLock is an application that uses secure file and image encryption systems. 
   ```bash
   source .venv/bin/activate
   ```
-- (Windows Only) Activate the virtual enviroment:
+- (Windows Only)Activate the virtual environments:
   ```bash
   .venv/Scripts/activate
   ```
