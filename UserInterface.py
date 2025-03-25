@@ -2,7 +2,8 @@ from tkinter import *
 from tkinter import ttk
 from PIL import ImageTk, Image
 
-global_image_list = [] # global image list to avoid the garbage collection  
+global_image_list = [] # global image list to avoid the garbage collection 
+global_view_list = [] # a list that stores all the created widgets 
 
 
 class QrView(Frame):
@@ -18,14 +19,14 @@ class QrView(Frame):
 
         # Add the elements to prompt the user to scan the generated QR image
         Label(parent, text="2FA GENERATION", font=("TkDefaultFont", 18)).grid(column=0, row=1)
-        image = PhotoImage(file="./images/qr-code.png").subsample(x=6, y=6)
+        image = PhotoImage(file="./Images/qr-code.png").subsample(x=6, y=6)
         global_image_list.append(image)
         Label(parent, image=image).grid(column=0, row=2, rowspan=1)
         Button(parent, text="Generate QR", width="21").grid(column=0,row=3, sticky="n")
 
 class TokenView(Frame):
     # TODO: Createa a destructor to cleanup global image list
-    def __init__(self, parent : Frame, command2):
+    def __init__(self, parent : Frame, *args):
         qrCode = StringVar()
         # Configure rows' and columns' weights
         for x in range(0,5):
@@ -35,7 +36,7 @@ class TokenView(Frame):
         Label(parent, text="2FA Authentication", font=("TkDefaultFont", 18)).grid(column=2, sticky="ns")
 
         # Create image using PIL (required for .jpg files)
-        image = Image.open("./images/2fa.jpg")
+        image = Image.open("./Images/2fa.jpg")
         image = image.resize((300,200))
         image= ImageTk.PhotoImage(image)
         global_image_list.append(image)
@@ -59,8 +60,11 @@ class TokenView(Frame):
 
 
 
+global_view_list.append(QrView)
+global_view_list.append(TokenView)
 
-
+# def switch_layout(root : Frame, index : int) :
+#     global_view_list[index](index)
 
 
 
@@ -80,21 +84,7 @@ holder = Frame(root)
 holder.grid(sticky="nesw")
 holder.columnconfigure(0, weight=1)
 
-#Invoke the QrView
-
-# QrView(holder)
-
-def createQrView(frm : Frame):
-    frm.grid_forget()
-    # Holder will contain all the elements
-    holder = Frame(root)
-    # holder.place(relx=0.5, rely=0.5, relheight=1, anchor="center")
-    holder.grid(sticky="nesw")
-    holder.columnconfigure(0, weight=1)
-    QrView(holder)
-
-
-TokenView(holder, createQrView)
+QrView(root)
 
 
 
