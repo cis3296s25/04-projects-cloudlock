@@ -6,8 +6,6 @@ CloudLock is an application that uses secure file and image encryption systems. 
 
 # How to run
 
-<<<<<<< HEAD
-
 - Initialize virtual enviroment
 
 ```bash
@@ -33,26 +31,13 @@ python -m venv .venv
 - Choose whether to store the encrypted file in the cloud or download it on your local machine.
 - # Enter cloud credentials and establish AWS connection.
 
-  <<<<<<< HEAD
-
-      source .venv/bin/activate
-      pip install -r .venv/Requirements.txt
-      python UserInterface.py
 
   -Run the program and enter your credentials to log in.
   -Select the option to encrypt or decrypt a file.
   -Choose the file and enter the private key.
   -Press the button to process the file.
   -Choose whether to store the encrypted file in the cloud or download it on your local machine.
-  =======
-
-* Run the program and enter your credentials to log in.
-* Select the option to encrypt or decrypt a file.
-* Choose the file and enter the private key.
-* Press the button to process the file.
-* Choose whether to store the encrypted file in the cloud or download it on your local machine.
-  > > > > > > > 92f604d (Update README.md)
-  > > > > > > > 6d92b84 (Update README.md)
+  
 
 # How to contribute
 
