@@ -19,7 +19,7 @@ class QrView(Frame):
 
         # Add the elements to prompt the user to scan the generated QR image
         Label(parent, text="2FA GENERATION", font=("TkDefaultFont", 18)).grid(column=0, row=1)
-        image = PhotoImage(file="./Images/qr-code.png").subsample(x=6, y=6)
+        image = PhotoImage(file="../Images/qr-code.png").subsample(x=6, y=6)
         global_image_list.append(image)
         Label(parent, image=image).grid(column=0, row=2, rowspan=1)
         Button(parent, text="Generate QR", width="21").grid(column=0,row=3, sticky="n")
@@ -36,7 +36,7 @@ class TokenView(Frame):
         Label(parent, text="2FA Authentication", font=("TkDefaultFont", 18)).grid(column=2, sticky="ns")
 
         # Create image using PIL (required for .jpg files)
-        image = Image.open("./Images/2fa.jpg")
+        image = Image.open("../Images/2fa.jpg")
         image = image.resize((300,200))
         image= ImageTk.PhotoImage(image)
         global_image_list.append(image)
