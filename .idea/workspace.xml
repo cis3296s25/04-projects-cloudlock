@@ -4,7 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="76cab986-a7dd-471d-ac44-0c6f3ba980da" name="Changes" comment="" />
+    <list default="true" id="76cab986-a7dd-471d-ac44-0c6f3ba980da" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend.py" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/Backend.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/File_Encrypt.py" beforeDir="false" afterPath="$PROJECT_DIR$/GUI/File_Encrypt.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Google_Auth.py" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/Google_Auth.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/current_code.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/file_search.py" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/file_search.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images.png" beforeDir="false" afterPath="$PROJECT_DIR$/Images/images.png" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -31,10 +40,14 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Python.Backend.executor": "Run",
+    "Python.File_Encrypt.executor": "Run",
     "Python.GUI.executor": "Run",
+    "Python.Google_Auth.executor": "Run",
+    "Python.UserInterface.executor": "Run",
+    "Python.main.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "<unknown>",
+    "git-widget-placeholder": "Gus-B",
     "last_opened_file_path": "C:/Users/Salwa/Desktop/GIT CODES/04-projects-cloudlock",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -44,6 +57,13 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\guso9\OneDrive\Documentos\GitHub\04-projects-cloudlock\Images" />
+      <recent name="C:\Users\guso9\OneDrive\Documentos\GitHub\04-projects-cloudlock\BackEnd" />
+      <recent name="C:\Users\guso9\OneDrive\Documentos\GitHub\04-projects-cloudlock\GUI" />
+    </key>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -63,6 +83,8 @@
       <workItem from="1742516637940" duration="3073000" />
       <workItem from="1742527628874" duration="140000" />
       <workItem from="1742569560315" duration="5915000" />
+      <workItem from="1743009620762" duration="137000" />
+      <workItem from="1743009816824" duration="696000" />
     </task>
     <servers />
   </component>
@@ -70,7 +92,12 @@
     <option name="version" value="3" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/_gitignore$Backend.coverage" NAME="Backend Coverage Results" MODIFIED="1743009948162" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/04_projects_cloudlock$GUI.coverage" NAME="GUI Coverage Results" MODIFIED="1742574099452" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/_gitignore$UserInterface.coverage" NAME="UserInterface Coverage Results" MODIFIED="1743009977758" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/GUI" />
+    <SUITE FILE_PATH="coverage/_gitignore$Google_Auth.coverage" NAME="Google_Auth Coverage Results" MODIFIED="1743010498790" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/BackEnd" />
     <SUITE FILE_PATH="coverage/04_projects_cloudlock$Backend.coverage" NAME="Backend Coverage Results" MODIFIED="1742574805988" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/_gitignore$File_Encrypt.coverage" NAME="File_Encrypt Coverage Results" MODIFIED="1743010286082" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/GUI" />
+    <SUITE FILE_PATH="coverage/_gitignore$main.coverage" NAME="main Coverage Results" MODIFIED="1743010009439" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
