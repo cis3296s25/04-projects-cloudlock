@@ -62,6 +62,13 @@ def get_rsa_private_key():
         print("Private key file not found. Please generate the keys first.")
         return None
 
+
+#TODO: Implement encryption and decryption functions using the loaded keys.
+
+#TODO: Implement Signature verification and signing functions using the loaded keys.
+
+#TODO: Implement Verify functions to check the integrity of the data using the public key.
+
 if __name__ == "__main__":
     create_rsa_keys()
     print(get_rsa_public_key())
