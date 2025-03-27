@@ -1,3 +1,5 @@
+"Collection of classes to display user interface"
+
 from tkinter import *
 from tkinter import ttk
 from PIL import ImageTk, Image
@@ -18,7 +20,13 @@ class QrView:
         global_image_list.append(image)
         Label(parent, image=image).grid(column=0, row=2, rowspan=1)
 
-        Button(parent, text="Generate QR", width="21").grid(column=0,row=3, sticky="n")
+        Button(parent, text="Generate QR", width="21", command= lambda : self.button_clicked(callback=kwargs.get("callback", None))).grid(column=0,row=3, sticky="n")
+
+    def button_clicked(self, **kwargs):
+        callback = kwargs.get("callback")   
+        if callback != None:
+            callback()
+        print("Button clicked")
 
 class TokenView:
     # TODO: Createa a destructor to cleanup global image list
@@ -52,10 +60,17 @@ class TokenView:
 
         Entry(loginFrame, textvariable=qrCode, font=("TkDefaultFont", 12)).grid(column=1, row=0)
 
-        Button(loginFrame, text="Log In", font=("TkDefaultFont", 12), command=lambda : command2(parent)).grid(column=0, row=1, columnspan=2)
+        Button(loginFrame, text="Log In", font=("TkDefaultFont", 12), command= lambda : self.button_clicked(callback=kwargs.get("callback", None))).grid(column=0, row=1, columnspan=2)
+
+    def button_clicked(self, **kwargs):
+        callback = kwargs.get("callback")   
+        if callback != None:
+            callback()
+        print("Button clicked")
+
 
 class FileEncryption:
-    def __init__(self, root):
+    def __init__(self, root, **kwargs):
         self.root = root
 
         # Call methods to create UI elements
@@ -64,7 +79,7 @@ class FileEncryption:
         self.create_file_name_entry()
         self.create_file_key_entry()
         self.create_file_desc_entry()
-        self.create_buttons()
+        self.create_buttons(encrypt_callback=kwargs.get("encrypt_callback"), home_callback=kwargs.get("home_callback"))
 
     # Method Definitions
     def create_title_label(self):
@@ -95,17 +110,23 @@ class FileEncryption:
         file_desc_lbl.grid(row=4, column=0, pady=5, sticky="e")
         self.file_desc_entry.grid(row=4, column=1, pady=5)
 
-    def create_buttons(self):
-        btn1 = Button(self.root, text="ENCRYPT", fg="white", bg="#007BFF", font=("Helvetica", 12, "bold"), command=self.encrypt_clicked, width=15, relief="raised", bd=2)
-        btn2 = Button(self.root, text="HOME", fg="white", bg="#28a745", font=("Helvetica", 12, "bold"), command=self.home_clicked, width=15, relief="raised", bd=2)
+    def create_buttons(self, **kwargs):
+        btn1 = Button(self.root, text="ENCRYPT", fg="white", bg="#007BFF", font=("Helvetica", 12, "bold"), command= lambda : self.encrypt_clicked(callback=kwargs.get("encrypt_callback", None)), width=15, relief="raised", bd=2)
+        btn2 = Button(self.root, text="HOME", fg="white", bg="#28a745", font=("Helvetica", 12, "bold"), command= lambda : self.home_clicked(callback=kwargs.get("home_callback", None)), width=15, relief="raised", bd=2)
 
         btn1.grid(row=5, column=0, columnspan=2, pady=20)
         btn2.grid(row=6, column=0, columnspan=2, pady=10)
 
-    def encrypt_clicked(self):
+    def encrypt_clicked(self, **kwargs):
+        callback = kwargs.get("callback")   
+        if callback != None:
+            callback()
         # Placeholder for encrypt logic
         print("Encrypt button clicked")
 
-    def home_clicked(self):
+    def home_clicked(self, **kwargs):
+        callback = kwargs.get("callback")   
+        if callback != None:
+            callback()
         # Placeholder for home button logic
         print("Home button clicked")
