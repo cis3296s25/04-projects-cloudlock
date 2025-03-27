@@ -7,8 +7,10 @@ from PIL import ImageTk, Image
 global_image_list = [] # global image list to avoid the garbage collection 
 
 class QrView:
+    "Accepts: callback"
     # TODO: Createa a destructor to cleanup global image list
     def __init__(self, parent : Frame, **kwargs):
+        self.callback = kwargs.get("callback", None)
         # Configure rows' weights
         for x in range(0,5):
             parent.rowconfigure(x,weight=1)
@@ -20,18 +22,20 @@ class QrView:
         global_image_list.append(image)
         Label(parent, image=image).grid(column=0, row=2, rowspan=1)
 
-        Button(parent, text="Generate QR", width="21", command= lambda : self.button_clicked(callback=kwargs.get("callback", None))).grid(column=0,row=3, sticky="n")
+        Button(parent, text="Generate QR", width="21", command= lambda : self.button_clicked()).grid(column=0,row=3, sticky="n")
 
-    def button_clicked(self, **kwargs):
-        callback = kwargs.get("callback")   
-        if callback != None:
-            callback()
+    def button_clicked(self):
+        if self.callback != None:
+            self.callback()
         print("Button clicked")
 
 class TokenView:
+    "Accepts: callback"
     # TODO: Createa a destructor to cleanup global image list
     def __init__(self, parent : Frame, **kwargs):
-        qrCode = StringVar()
+        self.qrCode = StringVar()
+        self.callback = kwargs.get("callback", None)
+
         # Configure rows' and columns' weights
         for x in range(0,5):
             parent.rowconfigure(x,weight=1)
@@ -58,20 +62,26 @@ class TokenView:
 
         Label(loginFrame, text="2FA - Token", font=("TkDefaultFont", 12)).grid(column=0, row=0)
 
-        Entry(loginFrame, textvariable=qrCode, font=("TkDefaultFont", 12)).grid(column=1, row=0)
+        Entry(loginFrame, textvariable=self.qrCode, font=("TkDefaultFont", 12)).grid(column=1, row=0)
 
-        Button(loginFrame, text="Log In", font=("TkDefaultFont", 12), command= lambda : self.button_clicked(callback=kwargs.get("callback", None))).grid(column=0, row=1, columnspan=2)
+        Button(loginFrame, text="Log In", font=("TkDefaultFont", 12), command= lambda : self.button_clicked()).grid(column=0, row=1, columnspan=2)
 
-    def button_clicked(self, **kwargs):
-        callback = kwargs.get("callback")   
-        if callback != None:
-            callback()
+    def button_clicked(self):
+        print(self.get_qr_text())
+        if self.callback != None:
+            self.callback()
         print("Button clicked")
+
+    def get_qr_text(self):
+        return self.qrCode.get()
 
 
 class FileEncryption:
+    "Accepts: home_callback, encryption_callback"
     def __init__(self, root, **kwargs):
         self.root = root
+        self.encrypt_callback = kwargs.get("encrypt_callback")
+        self.home_callback = kwargs.get("home_callback")
 
         # Call methods to create UI elements
         self.create_title_label()
@@ -79,7 +89,7 @@ class FileEncryption:
         self.create_file_name_entry()
         self.create_file_key_entry()
         self.create_file_desc_entry()
-        self.create_buttons(encrypt_callback=kwargs.get("encrypt_callback"), home_callback=kwargs.get("home_callback"))
+        self.create_buttons()
 
     # Method Definitions
     def create_title_label(self):
@@ -110,23 +120,21 @@ class FileEncryption:
         file_desc_lbl.grid(row=4, column=0, pady=5, sticky="e")
         self.file_desc_entry.grid(row=4, column=1, pady=5)
 
-    def create_buttons(self, **kwargs):
-        btn1 = Button(self.root, text="ENCRYPT", fg="white", bg="#007BFF", font=("Helvetica", 12, "bold"), command= lambda : self.encrypt_clicked(callback=kwargs.get("encrypt_callback", None)), width=15, relief="raised", bd=2)
-        btn2 = Button(self.root, text="HOME", fg="white", bg="#28a745", font=("Helvetica", 12, "bold"), command= lambda : self.home_clicked(callback=kwargs.get("home_callback", None)), width=15, relief="raised", bd=2)
+    def create_buttons(self):
+        btn1 = Button(self.root, text="ENCRYPT", fg="white", bg="#007BFF", font=("Helvetica", 12, "bold"), command= lambda : self.encrypt_clicked(), width=15, relief="raised", bd=2)
+        btn2 = Button(self.root, text="HOME", fg="white", bg="#28a745", font=("Helvetica", 12, "bold"), command= lambda : self.home_clicked(), width=15, relief="raised", bd=2)
 
         btn1.grid(row=5, column=0, columnspan=2, pady=20)
         btn2.grid(row=6, column=0, columnspan=2, pady=10)
 
-    def encrypt_clicked(self, **kwargs):
-        callback = kwargs.get("callback")   
-        if callback != None:
-            callback()
+    def encrypt_clicked(self):
+        if self.encrypt_callback != None:
+            self.callback()
         # Placeholder for encrypt logic
         print("Encrypt button clicked")
 
     def home_clicked(self, **kwargs):
-        callback = kwargs.get("callback")   
-        if callback != None:
-            callback()
+        if self.home_callback != None:
+            self.callback()
         # Placeholder for home button logic
         print("Home button clicked")
