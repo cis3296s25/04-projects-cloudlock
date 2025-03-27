@@ -26,7 +26,7 @@ CloudLock is an application that uses secure file and image encryption systems. 
 - Choose the file and enter the public key.
 - Press the button to process the file.
 - Choose whether to store the encrypted file in the cloud or download it on your local machine.
-- # Enter cloud credentials and establish AWS connection.
+- Enter cloud credentials and establish AWS connection.
   
 # How to contribute
 
