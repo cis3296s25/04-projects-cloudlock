@@ -2,3 +2,4 @@ Pillow
 qrcode
 pyotp
 rsa
+boto3
