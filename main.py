@@ -1,6 +1,6 @@
 from GUI import UserInterface as ui
 from tkinter import *
-from tkinter import ttk
+from tkinter import Tk
 
 # Setup our root and declare its size
 root = Tk()
@@ -16,7 +16,8 @@ holder = Frame(root)
 holder.columnconfigure(0, weight=1)
 holder.grid(sticky="nesw")
 
-# ui.QrView(root)
-# ui.FileSearch(root)
+ui.QrView(root)
+# ui.TokenView(root)
+# ui.FileEncryption(root)
 
 root.mainloop()
