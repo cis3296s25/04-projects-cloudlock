@@ -1,5 +1,6 @@
 import rsa
 import os
+
 # This module handles RSA encryption and decryption logic using the rsa library.
 
 # Get the directory of the current file and create a subdirectory for RSA keys
@@ -62,14 +63,75 @@ def get_rsa_private_key():
         print("Private key file not found. Please generate the keys first.")
         return None
 
+# Encrypts the given data using the RSA public key.
+def encrypt_data(data):
+    """
+    Encrypts the given data using the RSA public key.
+    """
+    public_key = get_rsa_public_key()
+    if public_key:
+        encrypted_data = rsa.encrypt(data.encode('utf-8'), public_key)
+        return encrypted_data
+    else:
+        print("Public key not found for encryption.")
+        return None
 
-#TODO: Implement encryption and decryption functions using the loaded keys.
+#Decrypts the given data using the RSA private key.
+def decrypt_data(encrypted_data):
+    """
+    Decrypts the given data using the RSA private key.
+    """
+    private_key = get_rsa_private_key()
+    if private_key:
+        decrypted_data = rsa.decrypt(encrypted_data, private_key).decode('utf-8')
+        return decrypted_data
+    else:
+        print("Private key not found for decryption.")
+        return None
 
 #TODO: Implement Signature verification and signing functions using the loaded keys.
+def sign_data(data):
+    """
+    Signs the given data using the RSA private key.
+    """
+    private_key = get_rsa_private_key()
+    if private_key:
+        signature = rsa.sign(data.encode('utf-8'), private_key, 'SHA-256')
+        return signature
+    else:
+        print("Private key not found for signing.")
+        return None
 
 #TODO: Implement Verify functions to check the integrity of the data using the public key.
+def verify_signature(data, signature):
+    """
+    Verifies the given signature using the RSA public key.
+    """
+    public_key = get_rsa_public_key()
+    if public_key:
+        try:
+            rsa.verify(data.encode('utf-8'), signature, public_key)
+            return True
+        except rsa.VerificationError:
+            return False
+    else:
+        print("Public key not found for verification.")
+        return False
 
 if __name__ == "__main__":
     create_rsa_keys()
     print(get_rsa_public_key())
     print(get_rsa_private_key())
+    message = "Hello, this is a test message."
+    signature = sign_data(message)
+    print(f"this is the signature:{signature}")
+    encrypted_message = encrypt_data(message)
+    print(f"this is the encrypted message:{encrypted_message}")
+    decrypted_message = decrypt_data(encrypted_message)
+    print(f"this is the decrypted message:{decrypted_message}")
+    is_verified = verify_signature(message, signature)
+    print(f"this is the verified message:{is_verified}")
+    is_not_verified = verify_signature("Hello this is a test message.", signature)
+    print (f"this is the not verified message:{is_not_verified}")
+
+

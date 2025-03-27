@@ -5,8 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="76cab986-a7dd-471d-ac44-0c6f3ba980da" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/BackEnd/aes_encryption_utils.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackEnd/hybrid_crypto.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackEnd/rsa_encryption_logic.py" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/rsa_encryption_logic.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackEnd/rsa_encryption_logic.py" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/rsa_encryption_utils.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,27 +33,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python.Backend.executor": "Run",
-    "Python.File_Encrypt.executor": "Run",
-    "Python.GUI.executor": "Run",
-    "Python.Google_Auth.executor": "Run",
-    "Python.UserInterface.executor": "Run",
-    "Python.main.executor": "Run",
-    "Python.rsa_encryption_logic.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "Gus-B",
-    "last_opened_file_path": "C:/Users/Salwa/Desktop/GIT CODES/04-projects-cloudlock",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python.Backend.executor&quot;: &quot;Run&quot;,
+    &quot;Python.File_Encrypt.executor&quot;: &quot;Run&quot;,
+    &quot;Python.GUI.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Google_Auth.executor&quot;: &quot;Run&quot;,
+    &quot;Python.UserInterface.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.rsa_encryption_logic.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Gus-B&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Salwa/Desktop/GIT CODES/04-projects-cloudlock&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\guso9\OneDrive\Documentos\GitHub\04-projects-cloudlock\Images" />
@@ -80,7 +82,8 @@
       <workItem from="1742569560315" duration="5915000" />
       <workItem from="1743009620762" duration="137000" />
       <workItem from="1743009816824" duration="696000" />
-      <workItem from="1743035122279" duration="15010000" />
+      <workItem from="1743035122279" duration="15692000" />
+      <workItem from="1743084596797" duration="5742000" />
     </task>
     <servers />
   </component>
@@ -94,7 +97,7 @@
     <SUITE FILE_PATH="coverage/_gitignore$UserInterface.coverage" NAME="UserInterface Coverage Results" MODIFIED="1743010577735" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/GUI" />
     <SUITE FILE_PATH="coverage/04_projects_cloudlock$Backend.coverage" NAME="Backend Coverage Results" MODIFIED="1742574805988" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/_gitignore$File_Encrypt.coverage" NAME="File_Encrypt Coverage Results" MODIFIED="1743010286082" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/GUI" />
-    <SUITE FILE_PATH="coverage/_gitignore$rsa_encryption_logic.coverage" NAME="rsa_encryption_logic Coverage Results" MODIFIED="1743045767862" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/BackEnd" />
+    <SUITE FILE_PATH="coverage/_gitignore$rsa_encryption_logic.coverage" NAME="rsa_encryption_logic Coverage Results" MODIFIED="1743092445119" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/BackEnd" />
     <SUITE FILE_PATH="coverage/_gitignore$main.coverage" NAME="main Coverage Results" MODIFIED="1743010009439" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
