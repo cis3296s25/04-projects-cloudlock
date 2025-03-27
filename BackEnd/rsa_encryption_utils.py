@@ -3,11 +3,11 @@ import os
 
 # This module handles RSA encryption and decryption logic using the rsa library.
 
-# Get the directory of the current file and create a subdirectory for RSA keys
+# Get the absolute directory of the current file and create a subdirectory for RSA keys
 BASE_DIR = os.path.dirname(__file__)
 RSA_DIR = os.path.join(BASE_DIR, "RsaKeys")
 
-# Define paths for public and private key files
+# Define absolute paths for public and private key files
 PUB_KEY_PATH = os.path.join(RSA_DIR, "publicKey.pem")
 PRIV_KEY_PATH = os.path.join(RSA_DIR, "privateKey.pem")
 
