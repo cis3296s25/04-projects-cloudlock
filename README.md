@@ -2,7 +2,7 @@
 
 CloudLock is an application that uses secure file and image encryption systems. It uses Python and its libraries, such as TkInter, QRCode, PIL, and Boto3 for the AWS cloud connection.
 
-![This is a screenshot.](images.png)
+![This is a screenshot.](Images/images.png)
 
 # How to run
 
