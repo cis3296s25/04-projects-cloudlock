@@ -1,2 +1,4 @@
 Pillow
+qrcode
+pyotp
 boto3
