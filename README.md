@@ -7,71 +7,28 @@ CloudLock is an application that uses secure file and image encryption systems. 
 # How to run
 <<<<<<< HEAD
 
-- Initialize virtual enviroment
-
+- Windows:
   ```bash
   python -m venv .venv
-  ```
-
-=======
-<<<<<<< HEAD
->>>>>>> c4a1c9c (Update README.md)
-- (Linux Only)Activate the virtual environment:
-  ```bash
-  source .venv/bin/activate
-  ```
-- (Windows Only)Activate the virtual environments:
-  ```bash
   .venv/Scripts/activate
-  ```
-- Download packages:
-  ```bash
   pip install -r ./Requirements.txt
-  ```
-- Run the application:
-  ```bash
   python main.py
   ```
+- Linux:
+  ```bash
+  python -m venv .venv
+  source .venv/bin/activate
+  pip install -r ./Requirements.txt
+  python main.py
+  ```
+
 - Complete Google two-factor authentication to log in.
 - Select the option to encrypt or decrypt a file.
 - Choose the file and enter the public key.
 - Press the button to process the file.
 - Choose whether to store the encrypted file in the cloud or download it on your local machine.
-<<<<<<< HEAD
-- # Enter cloud credentials and establish AWS connection.
-
-
-  -Run the program and enter your credentials to log in.
-  -Select the option to encrypt or decrypt a file.
-  -Choose the file and enter the private key.
-  -Press the button to process the file.
-  -Choose whether to store the encrypted file in the cloud or download it on your local machine.
-  
-=======
 - Enter cloud credentials and establish AWS connection.
-=======
-<<<<<<< HEAD
-    
-    source .venv/bin/activate
-    pip install -r .venv/Requirements.txt
-    python UserInterface.py
-
-
- -Run the program and enter your credentials to log in.
- -Select the option to encrypt or decrypt a file.
- -Choose the file and enter the private key.
- -Press the button to process the file.
- -Choose whether to store the encrypted file in the cloud or download it on your local machine.
-=======
-* Run the program and enter your credentials to log in.
-* Select the option to encrypt or decrypt a file.
-* Choose the file and enter the private key.
-* Press the button to process the file.
-* Choose whether to store the encrypted file in the cloud or download it on your local machine.
->>>>>>> 92f604d (Update README.md)
->>>>>>> 6d92b84 (Update README.md)
->>>>>>> c4a1c9c (Update README.md)
-
+  
 # How to contribute
 
 Follow this project board to know the latest status of the project: [http://...]([http://...])
