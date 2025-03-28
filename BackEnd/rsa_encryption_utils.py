@@ -118,6 +118,7 @@ def verify_signature(data, signature):
         print("Public key not found for verification.")
         return False
 
+#this is the main function to test the RSA encryption and decryption logic.
 if __name__ == "__main__":
     create_rsa_keys()
     print(get_rsa_public_key())
