@@ -57,19 +57,16 @@ class AuthenticateView:
 
         Label(parent).grid(column=2, row=1, columnspan=1, sticky="n")
 
-        authenticate_frame = Frame(parent)
-        authenticate_frame.grid(column=2, row=2, sticky="nesw", rowspan=5)
-
         for x in range(0,5):
-            authenticate_frame.rowconfigure(x, weight=1)
-            authenticate_frame.columnconfigure(x, weight=1)
+            parent.rowconfigure(x, weight=1)
+            parent.columnconfigure(x, weight=1)
 
-        Label(authenticate_frame, text="Enter username", font=("TkDefaultFont", 12)).grid(column=0, row=0)
-        Entry(authenticate_frame, textvariable=self.username, font=("TkDefaultFont", 12)).grid(column=1, row=0)
+        Label(parent, text="Enter username", font=("TkDefaultFont", 12)).grid(column=0, row=0)
+        Entry(parent, textvariable=self.username, font=("TkDefaultFont", 12)).grid(column=1, row=0)
 
-        Label(authenticate_frame, text="Enter code", font=("TkDefaultFont", 12)).grid(column=0, row=1)
-        Entry(authenticate_frame, textvariable=self.code, font=("TkDefaultFont", 12)).grid(column=1, row=1)
-        Button(authenticate_frame, text="Submit", font=("TkDefaultFont", 12), command=lambda: self.button_clicked()).grid(
+        Label(parent, text="Enter code", font=("TkDefaultFont", 12)).grid(column=0, row=1)
+        Entry(parent, textvariable=self.code, font=("TkDefaultFont", 12)).grid(column=1, row=1)
+        Button(parent, text="Submit", font=("TkDefaultFont", 12), command=lambda: self.button_clicked()).grid(
             column=0, row=2, columnspan=2)
 
     def button_clicked(self):
