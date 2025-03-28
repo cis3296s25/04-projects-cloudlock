@@ -10,20 +10,13 @@ def authenticate_acct(name_of_user):
     authentication_link = pyotp.totp.TOTP(secret_key).provisioning_uri(name_of_user,"CloudLockTeam")
     #name_of_user is their google authenticator username and CloudLockTeam is the name of the issuer
 
-<<<<<<<< Updated upstream:Google_Auth.py
-    qrcode.make(authentication_link).save("current_code.png")
-========
     qrcode.make(authentication_link).save("../Images/qr-code.png")
->>>>>>>> Stashed changes:Microsoft_Auth.py
     qrcode_linked = pyotp.TOTP(secret_key)
 
     #basically, creates a google authentication for name_of_user issued by CloudLockTeam that is then made
     #into a qr code instead of a link, and basically this random qr code is hooked up to the secret_key
     #then the function returns a pointer to the qr code image
-<<<<<<<< Updated upstream:Google_Auth.py
-    return Image.open(r"current_code.png")
-========
+
     return qrcode_linked
->>>>>>>> Stashed changes:Microsoft_Auth.py
 
 #authenticate_acct("StarfoxAndStellar")
