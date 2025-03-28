@@ -3,7 +3,6 @@ import tkinter
 from tkinter import *
 #from tkinter import ttk, * imports everything
 from PIL import ImageTk, Image
-
 from BackEnd.Microsoft_Auth import authenticate_acct
 
 global_image_list = [] # global image list to avoid the garbage collection 
