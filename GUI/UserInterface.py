@@ -8,7 +8,13 @@ from BackEnd.Microsoft_Auth import authenticate_acct
 
 global_image_list = [] # global image list to avoid the garbage collection 
 
-class QrView(Frame):
+def changeView(root : Frame, view):
+    for child in root.winfo_children():
+        child.destroy()
+    view(root)
+
+class QrView:
+    "Accepts: callback"
     # TODO: Createa a destructor to cleanup global image list
     # TODO: only post qr_code after AuthenticateView (AuthenticateView is untested)
     def __init__(self, parent : Frame, **kwargs):
@@ -28,10 +34,8 @@ class QrView(Frame):
         Label(parent, image=image).grid(column=0, row=2, rowspan=1)
         Label(parent, text="Microsoft Authentication Username", font=("TkDefaultFont", 18)).grid(column=0, row=5)
         Entry(qr_frame, textvariable=text_variable, font=("TkDefaultFont", 12)).grid(column=1, row=0)
-
         Button(parent, text="Generate QR", width="21", command=lambda: self.button_clicked()).grid(
             column=0, row=3, sticky="n")
-
 
     def button_clicked(self):
         if self.callback != None:
@@ -80,12 +84,13 @@ class AuthenticateView:
         else:
             print("False >:(")
 
-
 class TokenView:
     "Accepts: callback"
     # TODO: Createa a destructor to cleanup global image list
-    def __init__(self, parent : Frame, *args):
-        qrCode = StringVar()
+    def __init__(self, parent : Frame, **kwargs):
+        self.qrCode = StringVar()
+        self.callback = kwargs.get("callback", None)
+
         # Configure rows' and columns' weights
         for x in range(0,5):
             parent.rowconfigure(x,weight=1)
@@ -112,56 +117,79 @@ class TokenView:
 
         Label(loginFrame, text="2FA - Token", font=("TkDefaultFont", 12)).grid(column=0, row=0)
 
-        Entry(loginFrame, textvariable=qrCode, font=("TkDefaultFont", 12)).grid(column=1, row=0)
+        Entry(loginFrame, textvariable=self.qrCode, font=("TkDefaultFont", 12)).grid(column=1, row=0)
 
-        Button(loginFrame, text="Log In", font=("TkDefaultFont", 12), command=lambda : command2(parent)).grid(column=0, row=1, columnspan=2)
+        Button(loginFrame, text="Log In", font=("TkDefaultFont", 12), command= lambda : self.button_clicked()).grid(column=0, row=1, columnspan=2)
 
-class FileSearch(Frame):
-    def __init__(self, frame):
-        # using helvetica for more modern look
-        font_label = ("Helvetica", 12)
-        font_entry = ("Helvetica", 12)
-        font_button = ("Helvetica", 12, "bold")
+    def button_clicked(self):
+        print(self.get_qr_text())
+        if self.callback != None:
+            self.callback()
+        print("Button clicked")
 
-        # creating title
-        title_lbl = Label(frame, text='File Encryption System', font=("Helvetica", 16, "bold"), fg="#333", bg="#f0f0f0")
+    def get_qr_text(self):
+        return self.qrCode.get()
+
+
+class FileEncryption:
+    "Accepts: home_callback, encryption_callback"
+    def __init__(self, root, **kwargs):
+        self.root = root
+        self.encrypt_callback = kwargs.get("encrypt_callback")
+        self.home_callback = kwargs.get("home_callback")
+
+        # Call methods to create UI elements
+        self.create_title_label()
+        self.create_file_path_entry()
+        self.create_file_name_entry()
+        self.create_file_key_entry()
+        self.create_file_desc_entry()
+        self.create_buttons()
+
+    # Method Definitions
+    def create_title_label(self):
+        title_lbl = Label(self.root, text='File Encryption System', font=("Helvetica", 16, "bold"), fg="#333", bg="#f0f0f0")
         title_lbl.grid(row=0, column=0, columnspan=2, pady=(0, 20))
 
-        # file path entry
-        file_path_lbl = Label(frame, text="File Path:", font=font_label, bg="#f0f0f0")
-        file_path_entry = Entry(frame, width=40, font=font_entry, bd=2, relief="solid")
+    def create_file_path_entry(self):
+        file_path_lbl = Label(self.root, text="File Path:", font=("Helvetica", 12), bg="#f0f0f0")
+        self.file_path_entry = Entry(self.root, width=40, font=("Helvetica", 12), bd=2, relief="solid")
         file_path_lbl.grid(row=1, column=0, pady=5, sticky="e")
-        file_path_entry.grid(row=1, column=1, pady=5)
+        self.file_path_entry.grid(row=1, column=1, pady=5)
 
-        # file naame entry
-        file_name_lbl = Label(frame, text="File Name:", font=font_label, bg="#f0f0f0")
-        file_name_entry = Entry(frame, width=40, font=font_entry, bd=2, relief="solid")
+    def create_file_name_entry(self):
+        file_name_lbl = Label(self.root, text="File Name:", font=("Helvetica", 12), bg="#f0f0f0")
+        self.file_name_entry = Entry(self.root, width=40, font=("Helvetica", 12), bd=2, relief="solid")
         file_name_lbl.grid(row=2, column=0, pady=5, sticky="e")
-        file_name_entry.grid(row=2, column=1, pady=5)
+        self.file_name_entry.grid(row=2, column=1, pady=5)
 
-        # file key entry
-        file_key_lbl = Label(frame, text="File Key:", font=font_label, bg="#f0f0f0")
-        file_key_entry = Entry(frame, width=40, font=font_entry, bd=2, relief="solid")
+    def create_file_key_entry(self):
+        file_key_lbl = Label(self.root, text="File Key:", font=("Helvetica", 12), bg="#f0f0f0")
+        self.file_key_entry = Entry(self.root, width=40, font=("Helvetica", 12), bd=2, relief="solid")
         file_key_lbl.grid(row=3, column=0, pady=5, sticky="e")
-        file_key_entry.grid(row=3, column=1, pady=5)
+        self.file_key_entry.grid(row=3, column=1, pady=5)
 
-        # file description entry
-        file_desc_lbl = Label(frame, text="File Description:", font=font_label, bg="#f0f0f0")
-        file_desc_entry = Entry(frame, width=40, font=font_entry, bd=2, relief="solid")
+    def create_file_desc_entry(self):
+        file_desc_lbl = Label(self.root, text="File Description:", font=("Helvetica", 12), bg="#f0f0f0")
+        self.file_desc_entry = Entry(self.root, width=40, font=("Helvetica", 12), bd=2, relief="solid")
         file_desc_lbl.grid(row=4, column=0, pady=5, sticky="e")
-        file_desc_entry.grid(row=4, column=1, pady=5)
+        self.file_desc_entry.grid(row=4, column=1, pady=5)
 
-        # function to display entry values
-        def clicked():
-            file_name = file_name_entry.get()
-            file_key = file_key_entry.get()
-            file_desc = file_desc_entry.get()
-            print(f"File Name: {file_name}, File Key: {file_key}, File Description: {file_desc}")
+    def create_buttons(self):
+        btn1 = Button(self.root, text="ENCRYPT", fg="white", bg="#007BFF", font=("Helvetica", 12, "bold"), command= lambda : self.encrypt_clicked(), width=15, relief="raised", bd=2)
+        btn2 = Button(self.root, text="HOME", fg="white", bg="#28a745", font=("Helvetica", 12, "bold"), command= lambda : self.home_clicked(), width=15, relief="raised", bd=2)
 
-        # buttons for ENCRYPT and HOME
-        btn1 = Button(frame, text="ENCRYPT", fg="white", bg="#007BFF", font=font_button, command=clicked, width=15, relief="raised", bd=2)
-        btn2 = Button(frame, text="HOME", fg="white", bg="#28a745", font=font_button, command=clicked, width=15, relief="raised", bd=2)
-
-        # position buttons below entries, centered
         btn1.grid(row=5, column=0, columnspan=2, pady=20)
         btn2.grid(row=6, column=0, columnspan=2, pady=10)
+
+    def encrypt_clicked(self):
+        if self.encrypt_callback != None:
+            self.callback()
+        # Placeholder for encrypt logic
+        print("Encrypt button clicked")
+
+    def home_clicked(self, **kwargs):
+        if self.home_callback != None:
+            self.callback()
+        # Placeholder for home button logic
+        print("Home button clicked")
