@@ -1,8 +1,5 @@
-<<<<<<< Updated upstream
-=======
 "Collection of classes to display user interface"
 import tkinter
->>>>>>> Stashed changes
 from tkinter import *
 #from tkinter import ttk, * imports everything
 from PIL import ImageTk, Image
