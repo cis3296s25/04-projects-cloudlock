@@ -6,6 +6,11 @@ from PIL import ImageTk, Image
 
 global_image_list = [] # global image list to avoid the garbage collection 
 
+def changeView(root : Frame, view):
+    for child in root.winfo_children():
+        child.destroy()
+    view(root)
+
 class QrView:
     "Accepts: callback"
     # TODO: Createa a destructor to cleanup global image list
