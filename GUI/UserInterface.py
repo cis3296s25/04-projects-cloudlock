@@ -1,18 +1,26 @@
+<<<<<<< Updated upstream
+=======
 "Collection of classes to display user interface"
 import tkinter
+>>>>>>> Stashed changes
 from tkinter import *
 #from tkinter import ttk, * imports everything
 from PIL import ImageTk, Image
+
 from BackEnd.Microsoft_Auth import authenticate_acct
 
 global_image_list = [] # global image list to avoid the garbage collection 
 
 class QrView(Frame):
     # TODO: Createa a destructor to cleanup global image list
+<<<<<<< Updated upstream
+    def __init__(self, parent : Frame, *args):
+=======
     # TODO: only post qr_code after AuthenticateView (AuthenticateView is untested)
     def __init__(self, parent : Frame, **kwargs):
         self.callback = kwargs.get("callback", None)
         text_variable = tkinter.StringVar()
+>>>>>>> Stashed changes
         # Configure rows' weights
         for x in range(0,5):
             parent.rowconfigure(x,weight=1)
@@ -25,6 +33,12 @@ class QrView(Frame):
         image = PhotoImage(file="./Images/qr-code.png").subsample(x=6, y=6)
         global_image_list.append(image)
         Label(parent, image=image).grid(column=0, row=2, rowspan=1)
+
+<<<<<<< Updated upstream
+        Button(parent, text="Generate QR", width="21").grid(column=0,row=3, sticky="n")
+
+class TokenView(Frame):
+=======
         Label(parent, text="Microsoft Authentication Username", font=("TkDefaultFont", 18)).grid(column=0, row=5)
         Entry(qr_frame, textvariable=text_variable, font=("TkDefaultFont", 12)).grid(column=1, row=0)
 
@@ -82,6 +96,7 @@ class AuthenticateView:
 
 class TokenView:
     "Accepts: callback"
+>>>>>>> Stashed changes
     # TODO: Createa a destructor to cleanup global image list
     def __init__(self, parent : Frame, *args):
         qrCode = StringVar()
