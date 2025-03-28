@@ -5,6 +5,7 @@ CloudLock is an application that uses secure file and image encryption systems. 
 ![This is a screenshot.](Images/images.png)
 
 # How to run
+<<<<<<< HEAD
 
 - Windows:
   ```bash

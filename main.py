@@ -16,8 +16,9 @@ holder = Frame(root)
 holder.columnconfigure(0, weight=1)
 holder.grid(sticky="nesw")
 
-ui.QrView(root)
+# ui.QrView(root)
 # ui.TokenView(root)
 # ui.FileEncryption(root)
+ui.AuthenticateView(root)
 
 root.mainloop()
