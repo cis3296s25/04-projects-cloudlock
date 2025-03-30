@@ -119,47 +119,41 @@ def verify_signature(data, signature):
         print("Public key not found for verification.")
         return False
 
-#TODO: save the encrypted key
-
-#TODO: load the encrypted key
-
 #this is the main function to test the RSA encryption and decryption logic.
 if __name__ == "__main__":
-    if __name__ == "__main__":
-        create_rsa_keys()
 
-        # Print RSA keys for reference
-        print("Public Key:", get_rsa_public_key())
-        print("Private Key:", get_rsa_private_key())
+    # Create RSA keys if they don't exist
+    create_rsa_keys()
 
-        # 1. Generate a new AES key (random 16-byte key)
-        aes_key = get_random_bytes(16)
-        print(f"Original AES Key: {aes_key}")
+    # Print RSA keys for reference
+    print("Public Key:", get_rsa_public_key())
+    print("Private Key:", get_rsa_private_key())
 
-        # 2. Encrypt the AES key using RSA
-        encrypted_key = encrypt_aes_key(aes_key)
-        print(f"Encrypted AES Key: {encrypted_key}")
+    # 1. Generate a new AES key (random 16-byte key)
+    aes_key = get_random_bytes(16)
+    print(f"Original AES Key: {aes_key}")
 
-        # 3. Decrypt the AES key using RSA
-        decrypted_key = decrypt_aes_key(encrypted_key)
-        print(f"Decrypted AES Key: {decrypted_key}")
+    # 2. Encrypt the AES key using RSA
+    encrypted_key = encrypt_aes_key(aes_key)
+    print(f"Encrypted AES Key: {encrypted_key}")
 
-        # 4. Check if the original and decrypted keys match
-        if aes_key == decrypted_key:
-            print("AES key decrypted successfully and matches the original.")
-        else:
-            print("Decrypted AES key does NOT match the original.")
+    # 3. Decrypt the AES key using RSA
+    decrypted_key = decrypt_aes_key(encrypted_key)
+    print(f"Decrypted AES Key: {decrypted_key}")
 
-        #Sign and verify a string message
-        message = "Hello, this is a test message."
-        signature = sign_data(message)
-        print(f"Signature: {signature}")
+    # 4. Check if the original and decrypted keys match
+    if aes_key == decrypted_key:
+        print("AES key decrypted successfully and matches the original.")
+    else:
+        print("Decrypted AES key does NOT match the original.")
 
-        is_verified = verify_signature(message, signature)
-        print(f"Signature verified: {is_verified}")
+    #Sign and verify a string message
+    message = "Hello, this is a test message."
+    signature = sign_data(message)
+    print(f"Signature: {signature}")
 
-        is_not_verified = verify_signature("Hello this is a test message.", signature)
-        print(f"Modified message verification failed: {not is_not_verified}")
+    is_verified = verify_signature(message, signature)
+    print(f"Signature verified: {is_verified}")
 
-
-
+    is_not_verified = verify_signature("Hello this is a test message.", signature)
+    print(f"Modified message verification failed: {not is_not_verified}")
