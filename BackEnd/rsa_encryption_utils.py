@@ -1,5 +1,6 @@
 import rsa
 import os
+from Crypto.Random import get_random_bytes
 
 # This module handles RSA encryption and decryption logic using the rsa library.
 
@@ -64,27 +65,27 @@ def get_rsa_private_key():
         return None
 
 # Encrypts the given data using the RSA public key.
-def encrypt_data(data):
+def encrypt_aes_key(aes_key):
     """
     Encrypts the given data using the RSA public key.
     """
     public_key = get_rsa_public_key()
     if public_key:
-        encrypted_data = rsa.encrypt(data.encode('utf-8'), public_key)
+        encrypted_data = rsa.encrypt(aes_key, public_key)
         return encrypted_data
     else:
         print("Public key not found for encryption.")
         return None
 
 #Decrypts the given data using the RSA private key.
-def decrypt_data(encrypted_data):
+def decrypt_aes_key(encrypted_aes_key):
     """
     Decrypts the given data using the RSA private key.
     """
     private_key = get_rsa_private_key()
     if private_key:
-        decrypted_data = rsa.decrypt(encrypted_data, private_key).decode('utf-8')
-        return decrypted_data
+        decrypted_aes_key = rsa.decrypt(encrypted_aes_key, private_key)
+        return decrypted_aes_key
     else:
         print("Private key not found for decryption.")
         return None
@@ -118,21 +119,47 @@ def verify_signature(data, signature):
         print("Public key not found for verification.")
         return False
 
+#TODO: save the encrypted key
+
+#TODO: load the encrypted key
+
 #this is the main function to test the RSA encryption and decryption logic.
 if __name__ == "__main__":
-    create_rsa_keys()
-    print(get_rsa_public_key())
-    print(get_rsa_private_key())
-    message = "Hello, this is a test message."
-    signature = sign_data(message)
-    print(f"this is the signature:{signature}")
-    encrypted_message = encrypt_data(message)
-    print(f"this is the encrypted message:{encrypted_message}")
-    decrypted_message = decrypt_data(encrypted_message)
-    print(f"this is the decrypted message:{decrypted_message}")
-    is_verified = verify_signature(message, signature)
-    print(f"this is the verified message:{is_verified}")
-    is_not_verified = verify_signature("Hello this is a test message.", signature)
-    print (f"this is the not verified message:{is_not_verified}")
+    if __name__ == "__main__":
+        create_rsa_keys()
+
+        # Print RSA keys for reference
+        print("Public Key:", get_rsa_public_key())
+        print("Private Key:", get_rsa_private_key())
+
+        # 1. Generate a new AES key (random 16-byte key)
+        aes_key = get_random_bytes(16)
+        print(f"Original AES Key: {aes_key}")
+
+        # 2. Encrypt the AES key using RSA
+        encrypted_key = encrypt_aes_key(aes_key)
+        print(f"Encrypted AES Key: {encrypted_key}")
+
+        # 3. Decrypt the AES key using RSA
+        decrypted_key = decrypt_aes_key(encrypted_key)
+        print(f"Decrypted AES Key: {decrypted_key}")
+
+        # 4. Check if the original and decrypted keys match
+        if aes_key == decrypted_key:
+            print("AES key decrypted successfully and matches the original.")
+        else:
+            print("Decrypted AES key does NOT match the original.")
+
+        #Sign and verify a string message
+        message = "Hello, this is a test message."
+        signature = sign_data(message)
+        print(f"Signature: {signature}")
+
+        is_verified = verify_signature(message, signature)
+        print(f"Signature verified: {is_verified}")
+
+        is_not_verified = verify_signature("Hello this is a test message.", signature)
+        print(f"Modified message verification failed: {not is_not_verified}")
+
 
 
