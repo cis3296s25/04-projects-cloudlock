@@ -15,7 +15,7 @@ def generate_aes_key():
     """
     This function generates a new AES key and saves it to a file.
     """
-
+    # Check if the directory for AES keys exists, if not create it
     if not os.path.exists(AES_DIR):
         os.makedirs(AES_DIR)
         print("Directory 'AesKey' created.")
@@ -24,7 +24,6 @@ def generate_aes_key():
 
     # Generate a new AES key if it doesn't exist
     if not os.path.exists(AES_KEY_PATH):
-        # Generate a new AES key
         key = get_random_bytes(16)  # AES key size 16 bytes (128 bits)
 
         # Save AES key to a file
@@ -64,17 +63,18 @@ def aes_encrypt(input_path, key):
         data = f.read()
 
     # Encrypt the data using AES GCM mode
-    nonce = get_random_bytes(12)  # Generate a random nonce
-    cipher = AES.new(key, AES.MODE_GCM, nonce=nonce)
-    ciphertext, tag = cipher.encrypt_and_digest(data)
+    nonce = get_random_bytes(12)  # Generate a random number used once
+    cipher = AES.new(key, AES.MODE_GCM, nonce=nonce)  # Create an AES-GCM cipher object initialized with the key and nonce
+    ciphertext, tag = cipher.encrypt_and_digest(data) # Encrypt the data and generate an authentication tag (returns ciphertext, tag)
 
     #Determine output file name
     filename = os.path.basename(input_path)
     output_filename = filename + ".enc"
     output_path = os.path.join(ENCRYPTED_FILE_DIR, output_filename)
 
+    # Save the encrypted data to a file
     with open (output_path, "wb") as f:
-        f.write(nonce + tag + ciphertext) # Prepend nonce and tag to the ciphertext
+        f.write(nonce + tag + ciphertext) #first 12 bytes = nonce, next 16 bytes = tag, remaining = ciphertext
     print(f"Data encrypted and saved to {output_path}")
     return output_path
 
@@ -89,14 +89,22 @@ def aes_decrypt(encrypted_path, key, output_path=None):
         output_path (str): Optional. If not given, removes ".enc" from input filename.
     """
 
+    # Check if the encrypted file exists
+    if not os.path.exists(encrypted_path):
+        print(f"Encrypted file not found: {encrypted_path}")
+        return
+
+    # Read the encrypted data
     with open(encrypted_path, "rb") as f:
         data = f.read()
 
+    # Extract nonce, tag, and ciphertext from the encrypted data
     nonce = data[:12]           # First 12 bytes = nonce
     tag = data[12:28]           # Next 16 bytes = authentication tag
     ciphertext = data[28:]      # Remaining = encrypted content
-
     cipher = AES.new(key, AES.MODE_GCM, nonce=nonce)
+
+    # Decrypt the data and verify the tag
     try:
         plaintext = cipher.decrypt_and_verify(ciphertext, tag)
     except ValueError:

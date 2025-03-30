@@ -89,7 +89,7 @@ def decrypt_data(encrypted_data):
         print("Private key not found for decryption.")
         return None
 
-#TODO: Implement Signature verification and signing functions using the loaded keys.
+# Signs the given data using the RSA private key.
 def sign_data(data):
     """
     Signs the given data using the RSA private key.
@@ -102,7 +102,7 @@ def sign_data(data):
         print("Private key not found for signing.")
         return None
 
-#TODO: Implement Verify functions to check the integrity of the data using the public key.
+# Verifies the given signature using the RSA public key.
 def verify_signature(data, signature):
     """
     Verifies the given signature using the RSA public key.
