@@ -106,25 +106,18 @@ def aes_encrypt(input_path, key):
     cipher = AES.new(key, AES.MODE_GCM, nonce=nonce)  # Create an AES-GCM cipher object initialized with the key and nonce
     ciphertext, tag = cipher.encrypt_and_digest(data) # Encrypt the data and generate an authentication tag (returns ciphertext, tag)
 
-    #Determine output file name
-    filename = os.path.basename(input_path)
-    output_filename = filename + ".enc"
-    output_path = os.path.join(ENCRYPTED_FILE_DIR, output_filename)
+    return nonce + tag + ciphertext #first 12 bytes = nonce, next 16 bytes = tag, remaining = ciphertext
 
-    # Save the encrypted data to a file
-    with open (output_path, "wb") as f:
-        f.write(nonce + tag + ciphertext) #first 12 bytes = nonce, next 16 bytes = tag, remaining = ciphertext
-    print(f"Data encrypted and saved to {output_path}")
-    return output_path , key
-
-def aes_decrypt(encrypted_path, key, output_path=None):
+def aes_decrypt(encrypted_path, key):
     """
     Decrypts a file encrypted with aes_encrypt() using AES-GCM.
 
     Args:
         encrypted_path (str): Path to the encrypted file.
-        key (bytes): AES key used for encryption.
-        output_path (str): Optional. If not given, removes ".enc" from input filename.
+        key (bytes): AES key used for decryption.
+
+    Returns:
+        bytes: The decrypted plaintext data, or None if decryption fails.
     """
 
     # Check if the encrypted file exists
@@ -145,22 +138,10 @@ def aes_decrypt(encrypted_path, key, output_path=None):
     # Decrypt the data and verify the tag
     try:
         plaintext = cipher.decrypt_and_verify(ciphertext, tag)
+        return plaintext
     except ValueError:
         print("Decryption failed: Invalid tag or corrupted data.")
         return
-
-    # Determine output filename
-    if output_path is None:
-        if encrypted_path.endswith(".enc"):
-            output_path = encrypted_path[:-4]  # remove .enc
-        else:
-            output_path = encrypted_path + ".dec"
-
-    with open(output_path, "wb") as f:
-        f.write(plaintext)
-
-    print(f"Decrypted data saved to: {output_path}")
-
 
 if __name__ == "__main__":
     key = generate_aes_key()
