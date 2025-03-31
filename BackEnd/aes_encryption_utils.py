@@ -90,13 +90,6 @@ def aes_encrypt(input_path, key):
     Encrypts data using AES encryption with the provided key.
     """
 
-    # Check if the directory for encrypted files exists, if not create it
-    if not os.path.exists(ENCRYPTED_FILE_DIR):
-        os.makedirs(ENCRYPTED_FILE_DIR)
-        print("Directory 'EncryptedFiles' created.")
-    else:
-        print("Directory 'EncryptedFiles' already exists.")
-
     # Read the data to be encrypted
     with open (input_path, "rb") as f:
         data = f.read()
