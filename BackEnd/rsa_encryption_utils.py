@@ -14,7 +14,8 @@ PRIV_KEY_PATH = os.path.join(RSA_DIR, "privateKey.pem")
 
 def create_rsa_keys():
     """
-    This function generates a new RSA key pair and saves them to PEM files.
+    Creates RSA public and private keys if they do not already exist.
+    The keys are saved in the 'RsaKeys' directory as PEM files.
     """
 
     # Check if the directory for RSA keys exists, if not create it
@@ -26,15 +27,15 @@ def create_rsa_keys():
 
     # Generate a new RSA key pair if they don't exist (public and private keys)
     if not os.path.exists(PUB_KEY_PATH) or not os.path.exists(PRIV_KEY_PATH):
-        publicKey, privateKey = rsa.newkeys(1024) #1024 bits is a common key size for RSA
+        public_key, private_key = rsa.newkeys(1024) #1024 bits is a common key size for RSA
 
         # Save Public Key to Pem File
         with open(PUB_KEY_PATH, "wb") as publicKeyFile:
-            publicKeyFile.write(publicKey.save_pkcs1(format='PEM'))
+            publicKeyFile.write(public_key.save_pkcs1(format='PEM'))
 
         # Save Private Key to Pem File
         with open(PRIV_KEY_PATH, "wb") as privateKeyFile:
-            privateKeyFile.write(privateKey.save_pkcs1(format='PEM'))
+            privateKeyFile.write(public_key.save_pkcs1(format='PEM'))
 
         print("RSA keys generated and saved.")
         print(f"Public Key: {PUB_KEY_PATH}")
@@ -46,6 +47,12 @@ def create_rsa_keys():
 
 # This function loads the RSA public key from the PEM file and returns it.
 def get_rsa_public_key():
+    """
+    Loads the RSA public key from the PEM file and returns it.
+
+    Returns:
+        public_key (rsa.PublicKey): The RSA public key object.
+    """
     try:
         with open(PUB_KEY_PATH, "rb") as publicKeyFile:
             public_key = rsa.PublicKey.load_pkcs1(publicKeyFile.read())
@@ -56,6 +63,12 @@ def get_rsa_public_key():
 
 # This function loads the RSA private key from the PEM file and returns it.
 def get_rsa_private_key():
+    """
+    Loads the RSA private key from the PEM file and returns it.
+
+    Returns:
+        private_key (rsa.PrivateKey): The RSA private key object.
+    """
     try:
         with open(PRIV_KEY_PATH, "rb") as privateKeyFile:
             private_key = rsa.PrivateKey.load_pkcs1(privateKeyFile.read())
@@ -68,6 +81,12 @@ def get_rsa_private_key():
 def encrypt_aes_key(aes_key):
     """
     Encrypts the given data using the RSA public key.
+
+    Args:
+        aes_key (bytes): The AES key to encrypt.
+
+    Returns:
+        encrypted_data (bytes): The encrypted AES key.
     """
     public_key = get_rsa_public_key()
     if public_key:
@@ -81,6 +100,12 @@ def encrypt_aes_key(aes_key):
 def decrypt_aes_key(encrypted_aes_key):
     """
     Decrypts the given data using the RSA private key.
+
+    Args:
+        encrypted_aes_key (bytes): The encrypted AES key to decrypt.
+
+    Returns:
+        decrypted_data (bytes): The decrypted AES key.
     """
     private_key = get_rsa_private_key()
     if private_key:
@@ -107,6 +132,13 @@ def sign_data(data):
 def verify_signature(data, signature):
     """
     Verifies the given signature using the RSA public key.
+
+    Args:
+        data (str): The original data that was signed.
+        signature (bytes): The signature to verify.
+
+    Returns:
+        bool: True if the signature is valid, False otherwise.
     """
     public_key = get_rsa_public_key()
     if public_key:

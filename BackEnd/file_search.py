@@ -3,6 +3,7 @@ from tkinter import Tk, filedialog
 
 #Select a file using a GUI
 def select_file():
+
     root = Tk()
     root.withdraw()  # Hide the root window
     file_path = filedialog.askopenfilename(title="Select file", filetypes=[("files", "*")])  # Open file dialog to select a file
@@ -10,10 +11,13 @@ def select_file():
 
 def select_save_as(encrypted_file_path):
 
+    # Extract the base name of the file
     base_name = os.path.basename(encrypted_file_path)
     print("base name:", base_name)
+
+    # If the file name ends with ".enc", remove the extension to get the original file name
     if base_name.endswith(".enc"):
-        original_file_name = base_name[:-4]  # Remove the ".enc" extension
+        original_file_name = base_name[:-4]
     else:
         original_file_name = base_name
     print("original file name:", original_file_name)
@@ -21,6 +25,7 @@ def select_save_as(encrypted_file_path):
     #Extract the original extension
     original_extension = os.path.splitext(original_file_name)[1]
     print("original extension:", original_extension)
+
     #GUI for save as dialog
     root = Tk()
     root.withdraw()  # Hide the root window
