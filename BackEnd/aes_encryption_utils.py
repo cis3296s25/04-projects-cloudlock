@@ -2,10 +2,7 @@ import os.path
 from Crypto.Cipher import AES
 from Crypto.Random import get_random_bytes
 
-#Define Absolute Directory of the current file and create a subdirectory for AES keys
-BASE_DIR = os.path.dirname(__file__)
-AES_DIR = os.path.join(BASE_DIR, "AesKey")
-ENCRYPTED_FILE_DIR = os.path.join(BASE_DIR, "EncryptedFiles")
+
 
 #Define absolute paths for AES key files
 #AES_KEY_PATH = os.path.join(AES_DIR, "aesKey.key")
@@ -18,9 +15,9 @@ ENCRYPTED_FILE_DIR = os.path.join(BASE_DIR, "EncryptedFiles")
 #     # Check if the directory for AES keys exists, if not create it
 #     if not os.path.exists(AES_DIR):
 #         os.makedirs(AES_DIR)
-#         print("Directory 'AesKey' created.")
+#         print("Directory 'EncryptedAesKeys' created.")
 #     else:
-#         print("Directory 'AesKey' already exists.")
+#         print("Directory 'EncryptedAesKeys' already exists.")
 #
 #     # Generate a new AES key if it doesn't exist
 #     if not os.path.exists(AES_KEY_PATH):
@@ -87,7 +84,14 @@ def generate_aes_key(length =16):
 
 def aes_encrypt(input_path, key):
     """
-    Encrypts data using AES encryption with the provided key.
+    Encrypts a file using AES encryption with the provided key.
+
+    Args:
+        input_path (str): Path to the file to be encrypted.
+        key (bytes): AES key used for encryption.
+
+    Returns:
+        nonce + tag + ciphertext (bytes): The encrypted data, including nonce and authentication tag.
     """
 
     # Read the data to be encrypted
