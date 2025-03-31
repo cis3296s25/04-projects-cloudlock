@@ -1,4 +1,5 @@
 import os
+from file_search import *
 from BackEnd.aes_encryption_utils import generate_aes_key, aes_encrypt, aes_decrypt
 from BackEnd.rsa_encryption_utils import (
     create_rsa_keys,
@@ -69,18 +70,33 @@ def hybrid_decrypt(input_file_path,output_file_path):
     #get the base name of the input file, and create paths for the encrypted file and AES key
     base_name = os.path.basename(input_file_path)
     encrypted_file_path = input_file_path
+
+    # Check if the file has the ".enc" extension
+    if base_name.endswith(".enc"):
+        base_name = base_name[:-4]  # Remove the ".enc" extension to be able to find key file
     encrypted_key_path = os.path.join(AES_DIR, base_name + ".key")
 
+    #Read the encrypted AES key from the file to pass as bytes
+    with open (encrypted_key_path, "rb") as ek:
+        encrypted_aes_key = ek.read()
+
     #Decrypt the AES key using RSA
-    aes_key = decrypt_aes_key(encrypted_key_path)
+    aes_key = decrypt_aes_key(encrypted_aes_key)
 
     # Decrypt the file using AES
     decrypted_data = aes_decrypt(encrypted_file_path, aes_key)
 
+    # Save the decrypted data to the specified output file
+    with open(output_file_path, "wb") as df:
+        df.write(decrypted_data)
+
+    print(f"Decrypted file saved to: {output_file_path}")
     return decrypted_data
 
 
-
-
 if __name__ == "__main__":
-    hybrid_encrypt()
+    # file_to_encrypt = select_file()
+    # hybrid_encrypt(file_to_encrypt)
+
+    file_to_decrypt = select_file()
+    hybrid_decrypt(file_to_decrypt, select_save_as(file_to_decrypt))
