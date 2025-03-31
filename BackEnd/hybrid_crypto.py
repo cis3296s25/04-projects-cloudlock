@@ -13,6 +13,7 @@ BASE_DIR = os.path.dirname(__file__)
 AES_DIR = os.path.join(BASE_DIR, "EncryptedAesKeys")
 ENCRYPTED_FILE_DIR = os.path.join(BASE_DIR, "EncryptedFiles")
 
+# Function to create directories for storing encrypted files and AES keys
 def setup_directories():
     """
     This function sets up the necessary directories for storing encrypted files and AES keys.
@@ -31,9 +32,13 @@ def setup_directories():
     else:
         print("Directory 'EncryptedFiles' already exists.")
 
+#Hybrid Encryption Method
 def hybrid_encrypt(input_file_path):
     """
-    This function performs hybrid encryption by first generating a new AES key,
+    This function encrypts a file using AES encryption and then encrypts the AES key using RSA encryption.
+
+    Args:
+        input_file_path (str): The path to the file to be encrypted.
     """
 
     # Setup directories for storing encrypted files and AES keys
@@ -65,7 +70,18 @@ def hybrid_encrypt(input_file_path):
     print(f"Encrypted file saved to: {encrypted_file_path}")
     print(f"Encrypted AES key saved to: {encrypted_key_path}")
 
+#Hybrid Decryption Method
 def hybrid_decrypt(input_file_path,output_file_path):
+    """
+    This function decrypts a file using AES decryption and then decrypts the AES key using RSA decryption.
+
+    Args:
+        input_file_path (str): The path to the file to be decrypted.
+        output_file_path (str): The path to save the decrypted file.
+
+    Returns:
+        decrypted_data (bytes): The decrypted data.
+    """
 
     #get the base name of the input file, and create paths for the encrypted file and AES key
     base_name = os.path.basename(input_file_path)
@@ -95,8 +111,8 @@ def hybrid_decrypt(input_file_path,output_file_path):
 
 
 if __name__ == "__main__":
-    # file_to_encrypt = select_file()
-    # hybrid_encrypt(file_to_encrypt)
+    file_to_encrypt = select_file()
+    hybrid_encrypt(file_to_encrypt)
 
     file_to_decrypt = select_file()
     hybrid_decrypt(file_to_decrypt, select_save_as(file_to_decrypt))
