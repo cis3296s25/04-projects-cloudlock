@@ -47,19 +47,32 @@ def hybrid_encrypt(input_file_path):
     # Encrypt the file using AES
     encrypted_data = aes_encrypt(input_file_path, aes_key)
 
+    #Save encrypted file
+    base_name = os.path.basename(input_file_path)
+    encrypted_file_path = os.path.join(ENCRYPTED_FILE_DIR, base_name + ".enc")
+    with open (encrypted_file_path, "wb") as ef:
+        ef.write(encrypted_data)
+
     #encrypt the AES key using RSA
     encrypted_aes_key = encrypt_aes_key(aes_key)
 
+    # Save the encrypted AES key to a file
+    encrypted_key_path  = os.path.join(AES_DIR, base_name + ".key")
+    with open(encrypted_key_path , "wb") as ek:
+        ek.write(encrypted_aes_key)
 
-    return {
-        "encrypted_file": encrypted_data,
-        "encrypted_aes_key": encrypted_aes_key,
-    }
+    print(f"Encrypted file saved to: {encrypted_file_path}")
+    print(f"Encrypted AES key saved to: {encrypted_key_path}")
 
-def hybrid_decrypt(encrypted_file_path, encrypted_aes_key):
+def hybrid_decrypt(input_file_path,output_file_path):
+
+    #get the base name of the input file, and create paths for the encrypted file and AES key
+    base_name = os.path.basename(input_file_path)
+    encrypted_file_path = input_file_path
+    encrypted_key_path = os.path.join(AES_DIR, base_name + ".key")
 
     #Decrypt the AES key using RSA
-    aes_key = decrypt_aes_key(encrypted_aes_key)
+    aes_key = decrypt_aes_key(encrypted_key_path)
 
     # Decrypt the file using AES
     decrypted_data = aes_decrypt(encrypted_file_path, aes_key)
