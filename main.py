@@ -16,14 +16,15 @@ root.grid()
 # Holder will contain all the elements
 holder = Frame(root)
 holder.columnconfigure(0, weight=1)
+holder.rowconfigure(0, weight=1)
 holder.grid(sticky="nesw")
 
 # ui.QrView(root)
 # ui.TokenView(root)
-# ui.FileEncryption(root)
+ui.FileEncryption(root)
 # ui.AuthenticateView(root)
 
-img = qr.QrImage("hi")
-Label(holder, image=img).grid()
+# img = qr.QrImage("hi")
+# Label(holder, image=img).grid()
 
 root.mainloop()
