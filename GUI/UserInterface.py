@@ -16,11 +16,9 @@ def changeView(root : tk.Frame, view):
 class QrView:
     "Accepts: callback"
     # TODO: Createa a destructor to cleanup global image list
-    def __init__(self, parent : Frame, **kwargs):
+    def __init__(self, parent : tk.Frame, **kwargs):
         self.callback = kwargs.get("callback", None)
-        self.root_frame = parent
-        text_variable = tkinter.StringVar()
-
+        text_variable = tk.StringVar()
         # Configure rows' weights
         for x in range(0,5):
             parent.rowconfigure(x,weight=1)
@@ -34,11 +32,11 @@ class QrView:
 
     def button_clicked_generate(self, username):
         authenticate_acct(username.get())
-        image = PhotoImage(file = "./Images/qr-code.png").subsample(x=6, y=6)
+        image = tk.PhotoImage(file = "./Images/qr-code.png").subsample(x=6, y=6)
         global_image_list.append(image)
-        Label(self.root_frame, image=image).grid(column=0, row=2, rowspan=1)
+        tk.Label(self.root_frame, image=image).grid(column=0, row=2, rowspan=1)
 
-        Button(self.root_frame, text="Authenticate code", width="21", command=lambda: self.button_clicked_auth()).grid(
+        tk.Button(self.root_frame, text="Authenticate code", width="21", command=lambda: self.button_clicked_auth()).grid(
             column=0, row=5, sticky="n")
 
     def button_clicked_auth(self):
@@ -48,9 +46,9 @@ class TokenView:
     "Accepts: callback"
     # TODO: Createa a destructor to cleanup global image list
 
-    def __init__(self, parent : Frame, **kwargs):
-        self.qrCode = StringVar()
-        self.username = StringVar()
+    def __init__(self, parent : tk.Frame, **kwargs):
+        self.qrCode = tk.StringVar()
+        self.username = tk.StringVar()
         self.root_frame = parent
         self.callback = kwargs.get("callback", None)
 
@@ -78,10 +76,10 @@ class TokenView:
             loginFrame.rowconfigure(x, weight=1)
             loginFrame.columnconfigure(x, weight=1)
 
-        Label(loginFrame, text="2FA - Token", font=("TkDefaultFont", 12)).grid(column=0, row=1)
-        Entry(loginFrame, textvariable=self.qrCode, font=("TkDefaultFont", 12)).grid(column=1, row=1)
+        tk.Label(loginFrame, text="2FA - Token", font=("TkDefaultFont", 12)).grid(column=0, row=1)
+        tk.Entry(loginFrame, textvariable=self.qrCode, font=("TkDefaultFont", 12)).grid(column=1, row=1)
 
-        Button(loginFrame, text="Log In", font=("TkDefaultFont", 12), command= lambda : self.button_clicked_verify()).grid(column=0, row=2, columnspan=2)
+        tk.Button(loginFrame, text="Log In", font=("TkDefaultFont", 12), command= lambda : self.button_clicked_verify()).grid(column=0, row=2, columnspan=2)
 
     def button_clicked_verify(self):
         str_qrcode = self.qrCode.get()
@@ -163,12 +161,11 @@ class FileEncryption:
 
     def create_buttons(self):
         btn1 = tk.Button(self.holder, text="ENCRYPT", fg="white", bg="#007BFF", font=("Helvetica", 12, "bold"), command= lambda : self.encrypt_clicked(), relief="raised", bd=2)
-        btn2 = tk.Button(self.holder, text="HOME", fg="white", bg="#28a745", font=("Helvetica", 12, "bold"), command= lambda : self.home_clicked(), relief="raised", bd=2)
 
-        btn1.grid(row=self.row_count, column=0, columnspan=2)
-        btn2.grid(row=self.row_count, column=1, columnspan=2)
-
+        btn1.grid(row=self.row_count,columnspan=5)
         self.row_count += 1
+
+        create_directory(self.root, self.row_count)
 
     def encrypt_clicked(self):
         if self.encrypt_callback != None:
@@ -182,7 +179,17 @@ class FileEncryption:
         # Placeholder for home button logic
         print("Home button clicked")
 
-class HomeView:
-    #TODO: ADD OPTIONS FOR USER TO PICK WHAT TO DO AFTER THEY HAVE LOGGED IN
-    def __init__(self, root, **kwargs):
-        self.root = root
+def create_directory(root, row_count):
+        #TODO: Get currently active menu
+
+        holder = tk.Frame()
+        holder.grid(row=row_count, columnspan=5, sticky="ews")
+        for x in range(2):
+            holder.columnconfigure(x, weight=1)
+        tk.Button(holder, text="Auth", fg="white", bg="#28a745", font=("Helvetica", 12, "bold"), relief="raised", bd=2).grid(column=0, row=0, sticky="ew")
+        tk.Button(holder, text="File Upload", fg="white", bg="#28a745", font=("Helvetica", 12, "bold"), relief="raised", bd=2).grid(column=1, row=0, sticky="we")
+        tk.Button(holder, text="QR Generator", fg="white", bg="#28a745", font=("Helvetica", 12, "bold"), relief="raised", bd=2).grid(column=0, row=1, sticky="ew")
+        tk.Button(holder, text="Encrypt/Decrypt", fg="white", bg="#28a745", font=("Helvetica", 12, "bold"), relief="raised", bd=2, command= lambda : changeView(root, QrView)).grid(column=1, row=1, sticky="we")
+        
+        
+        row_count += 1
