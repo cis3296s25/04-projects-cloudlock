@@ -1,3 +1,6 @@
 Pillow
-qrcode
+qrcode[pil]
 pyotp
+rsa
+PyCryptodome
+boto3

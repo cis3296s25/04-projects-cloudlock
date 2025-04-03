@@ -1,7 +1,7 @@
 #means from a specific python file, import all its functions
 import os.path
 
-def checkingFileType(filePath):
+def checking_file_type(filePath):
     FileTypesNames = {"png": ".png", "jpeg": ".jpeg", "text": ".txt", "pdf": ".pdf", "wordDoc": "docx",
                        "powerpoint": ".pptx", "excel": ".xlsx", "mp4": ".mp4", "mp3": ".mp3"}
     #the above can be done with magic but it would mean the user would need to install magic before running
@@ -15,16 +15,16 @@ def checkingFileType(filePath):
                 return fileName
 
 
-def correctFileForTest(filePath):
-    fileName = checkingFileType(filePath)
+def correct_file_for_test(filePath):
+    fileName = checking_file_type(filePath)
 
     if(fileName == "text"):
         return True
     else:
         return False
 
-def encryptingFile(filePath):
-    if(correctFileForTest(filePath)):
+def encrypting_file(filePath):
+    if(correct_file_for_test(filePath)):
 
 
-correctFileForTest("C:\\Users\\Salwa\\Downloads\\seq2.txt")
+#correctFileForTest("C:\\Users\\Salwa\\Downloads\\seq2.txt")
