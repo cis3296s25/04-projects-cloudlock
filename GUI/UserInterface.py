@@ -1,8 +1,7 @@
 "Collection of classes to display user interface"
 import tkinter as tk
-from tkinter import ttk
-from turtle import bgcolor
-#from tkinter import ttk, * imports everything
+from tkinter import *
+#* imports everything
 from PIL import ImageTk, Image
 from BackEnd.Microsoft_Auth import authenticate_acct, create_one_time_password, verify_user_code
 
@@ -18,15 +17,17 @@ class QrView:
     # TODO: Createa a destructor to cleanup global image list
     def __init__(self, parent : tk.Frame, **kwargs):
         self.callback = kwargs.get("callback", None)
-        text_variable = tk.StringVar()
+        self.root_frame = parent
+        text_variable = StringVar()
+
         # Configure rows' weights
         for x in range(0,5):
             parent.rowconfigure(x,weight=1)
 
         # Add the elements to prompt the user to scan the generated QR image
         tk.Label(parent, text="2FA GENERATION", font=("TkDefaultFont", 18)).grid(row=1,column=0)
-        tk.Label(parent, text="Microsoft Authentication Username", font=("TkDefaultFont", 18)).grid(row=5,column=0)
-        tk.Entry(parent, textvariable=text_variable, font=("TkDefaultFont", 12)).grid(row=0, column=1)
+        tk.Label(parent, text="Microsoft Authentication Username", font=("TkDefaultFont", 18)).grid(row=3,column=0)
+        tk.Entry(parent, textvariable=text_variable, font=("TkDefaultFont", 12)).grid(row=4, column=0)
         tk.Button(parent, text="Generate QR", width="21", command=lambda: self.button_clicked_generate(text_variable)).grid(
           column=0, row=5, sticky="n")
 
