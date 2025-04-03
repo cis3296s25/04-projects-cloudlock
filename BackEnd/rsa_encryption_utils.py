@@ -1,5 +1,6 @@
 import rsa
 import os
+from Crypto.Random import get_random_bytes
 
 # This module handles RSA encryption and decryption logic using the rsa library.
 
@@ -13,7 +14,8 @@ PRIV_KEY_PATH = os.path.join(RSA_DIR, "privateKey.pem")
 
 def create_rsa_keys():
     """
-    This function generates a new RSA key pair and saves them to PEM files.
+    Creates RSA public and private keys if they do not already exist.
+    The keys are saved in the 'RsaKeys' directory as PEM files.
     """
 
     # Check if the directory for RSA keys exists, if not create it
@@ -25,15 +27,15 @@ def create_rsa_keys():
 
     # Generate a new RSA key pair if they don't exist (public and private keys)
     if not os.path.exists(PUB_KEY_PATH) or not os.path.exists(PRIV_KEY_PATH):
-        publicKey, privateKey = rsa.newkeys(1024) #1024 bits is a common key size for RSA
+        public_key, private_key = rsa.newkeys(1024) #1024 bits is a common key size for RSA
 
         # Save Public Key to Pem File
         with open(PUB_KEY_PATH, "wb") as publicKeyFile:
-            publicKeyFile.write(publicKey.save_pkcs1(format='PEM'))
+            publicKeyFile.write(public_key.save_pkcs1(format='PEM'))
 
         # Save Private Key to Pem File
         with open(PRIV_KEY_PATH, "wb") as privateKeyFile:
-            privateKeyFile.write(privateKey.save_pkcs1(format='PEM'))
+            privateKeyFile.write(public_key.save_pkcs1(format='PEM'))
 
         print("RSA keys generated and saved.")
         print(f"Public Key: {PUB_KEY_PATH}")
@@ -45,6 +47,12 @@ def create_rsa_keys():
 
 # This function loads the RSA public key from the PEM file and returns it.
 def get_rsa_public_key():
+    """
+    Loads the RSA public key from the PEM file and returns it.
+
+    Returns:
+        public_key (rsa.PublicKey): The RSA public key object.
+    """
     try:
         with open(PUB_KEY_PATH, "rb") as publicKeyFile:
             public_key = rsa.PublicKey.load_pkcs1(publicKeyFile.read())
@@ -55,6 +63,12 @@ def get_rsa_public_key():
 
 # This function loads the RSA private key from the PEM file and returns it.
 def get_rsa_private_key():
+    """
+    Loads the RSA private key from the PEM file and returns it.
+
+    Returns:
+        private_key (rsa.PrivateKey): The RSA private key object.
+    """
     try:
         with open(PRIV_KEY_PATH, "rb") as privateKeyFile:
             private_key = rsa.PrivateKey.load_pkcs1(privateKeyFile.read())
@@ -64,32 +78,44 @@ def get_rsa_private_key():
         return None
 
 # Encrypts the given data using the RSA public key.
-def encrypt_data(data):
+def encrypt_aes_key(aes_key):
     """
     Encrypts the given data using the RSA public key.
+
+    Args:
+        aes_key (bytes): The AES key to encrypt.
+
+    Returns:
+        encrypted_data (bytes): The encrypted AES key.
     """
     public_key = get_rsa_public_key()
     if public_key:
-        encrypted_data = rsa.encrypt(data.encode('utf-8'), public_key)
+        encrypted_data = rsa.encrypt(aes_key, public_key)
         return encrypted_data
     else:
         print("Public key not found for encryption.")
         return None
 
 #Decrypts the given data using the RSA private key.
-def decrypt_data(encrypted_data):
+def decrypt_aes_key(encrypted_aes_key):
     """
     Decrypts the given data using the RSA private key.
+
+    Args:
+        encrypted_aes_key (bytes): The encrypted AES key to decrypt.
+
+    Returns:
+        decrypted_data (bytes): The decrypted AES key.
     """
     private_key = get_rsa_private_key()
     if private_key:
-        decrypted_data = rsa.decrypt(encrypted_data, private_key).decode('utf-8')
-        return decrypted_data
+        decrypted_aes_key = rsa.decrypt(encrypted_aes_key, private_key)
+        return decrypted_aes_key
     else:
         print("Private key not found for decryption.")
         return None
 
-#TODO: Implement Signature verification and signing functions using the loaded keys.
+# Signs the given data using the RSA private key.
 def sign_data(data):
     """
     Signs the given data using the RSA private key.
@@ -102,10 +128,17 @@ def sign_data(data):
         print("Private key not found for signing.")
         return None
 
-#TODO: Implement Verify functions to check the integrity of the data using the public key.
+# Verifies the given signature using the RSA public key.
 def verify_signature(data, signature):
     """
     Verifies the given signature using the RSA public key.
+
+    Args:
+        data (str): The original data that was signed.
+        signature (bytes): The signature to verify.
+
+    Returns:
+        bool: True if the signature is valid, False otherwise.
     """
     public_key = get_rsa_public_key()
     if public_key:
@@ -118,20 +151,41 @@ def verify_signature(data, signature):
         print("Public key not found for verification.")
         return False
 
+#this is the main function to test the RSA encryption and decryption logic.
 if __name__ == "__main__":
+
+    # Create RSA keys if they don't exist
     create_rsa_keys()
-    print(get_rsa_public_key())
-    print(get_rsa_private_key())
+
+    # Print RSA keys for reference
+    print("Public Key:", get_rsa_public_key())
+    print("Private Key:", get_rsa_private_key())
+
+    # 1. Generate a new AES key (random 16-byte key)
+    aes_key = get_random_bytes(16)
+    print(f"Original AES Key: {aes_key}")
+
+    # 2. Encrypt the AES key using RSA
+    encrypted_key = encrypt_aes_key(aes_key)
+    print(f"Encrypted AES Key: {encrypted_key}")
+
+    # 3. Decrypt the AES key using RSA
+    decrypted_key = decrypt_aes_key(encrypted_key)
+    print(f"Decrypted AES Key: {decrypted_key}")
+
+    # 4. Check if the original and decrypted keys match
+    if aes_key == decrypted_key:
+        print("AES key decrypted successfully and matches the original.")
+    else:
+        print("Decrypted AES key does NOT match the original.")
+
+    #Sign and verify a string message
     message = "Hello, this is a test message."
     signature = sign_data(message)
-    print(f"this is the signature:{signature}")
-    encrypted_message = encrypt_data(message)
-    print(f"this is the encrypted message:{encrypted_message}")
-    decrypted_message = decrypt_data(encrypted_message)
-    print(f"this is the decrypted message:{decrypted_message}")
+    print(f"Signature: {signature}")
+
     is_verified = verify_signature(message, signature)
-    print(f"this is the verified message:{is_verified}")
+    print(f"Signature verified: {is_verified}")
+
     is_not_verified = verify_signature("Hello this is a test message.", signature)
-    print (f"this is the not verified message:{is_not_verified}")
-
-
+    print(f"Modified message verification failed: {not is_not_verified}")
