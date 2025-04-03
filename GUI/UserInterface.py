@@ -3,7 +3,7 @@ import tkinter
 from tkinter import *
 #from tkinter import ttk, * imports everything
 from PIL import ImageTk, Image
-from BackEnd.Microsoft_Auth import authenticate_acct, create_one_time_password
+from BackEnd.Microsoft_Auth import authenticate_acct, create_one_time_password, verify_user_code
 
 global_image_list = [] # global image list to avoid the garbage collection 
 
@@ -17,7 +17,7 @@ class QrView:
     # TODO: Createa a destructor to cleanup global image list
     def __init__(self, parent : Frame, **kwargs):
         self.callback = kwargs.get("callback", None)
-        self.username = tkinter.StringVar()
+        self.root_frame = parent
         text_variable = tkinter.StringVar()
         # Configure rows' weights
         for x in range(0,5):
@@ -26,30 +26,33 @@ class QrView:
         # Add the elements to prompt the user to scan the generated QR image
         Label(parent, text="2FA GENERATION", font=("TkDefaultFont", 18)).grid(column=0, row=1)
 
-        image = PhotoImage(file="./Images/qr-code.png").subsample(x=6, y=6)
-        global_image_list.append(image)
-        Label(parent, image=image).grid(column=0, row=2, rowspan=1)
+        #image = PhotoImage(file="./Images/qr-code.png").subsample(x=6, y=6)
+        #global_image_list.append(image)
+        #Label(parent, image=image).grid(column=0, row=2, rowspan=1)
 
         Label(parent, text="Microsoft Authentication Username", font=("TkDefaultFont", 12)).grid(column=0, row=3)
         Entry(parent, textvariable = text_variable, font=("TkDefaultFont", 12)).grid(column=0, row=4)
-        self.username = text_variable.get()
 
-        Button(parent, text="Authenticate code", width="21", command=lambda: self.button_clicked()).grid(
+        Button(parent, text="Generate qr code", width="21", command=lambda: self.button_clicked_generate(text_variable)).grid(
             column=0, row=5, sticky="n")
 
-    def button_clicked(self):
-        #TODO: work out how to send username to backend so that it can display the qr code when the
-        #TODO: button is clicked.
-        authenticate_acct(self.username)
+    def button_clicked_generate(self, username):
+        authenticate_acct(username.get())
 
-        image = PhotoImage("./Images/qr-code.png".subsample(x=6, y=6))
+        image = PhotoImage(file = "./Images/qr-code.png").subsample(x=6, y=6)
         global_image_list.append(image)
         Label(self.root_frame, image=image).grid(column=0, row=2, rowspan=1)
+
+        Button(self.root_frame, text="Authenticate code", width="21", command=lambda: self.button_clicked_auth()).grid(
+            column=0, row=5, sticky="n")
 
         #creates user acct for the microsoft authentication. Then it creates the qr_code
         #if self.callback != None:
             #self.callback()
         #print("Button clicked")
+
+    def button_clicked_auth(self):
+        changeView(self.root_frame, TokenView)
 
 class TokenView:
     "Accepts: callback"
@@ -92,9 +95,10 @@ class TokenView:
     def button_clicked(self):
         #TODO: Make sure that when user inputs code, stuff gets sent to backend and actually verifies it
         #TODO: before changing the view to the "home page"
-        to_verify = create_one_time_password()
+        str_qrcode = self.qrCode.get()
+        success_or_not = verify_user_code(str_qrcode, create_one_time_password())
 
-        if(to_verify.verify(self.qrCode) != False): #take the code inout by user, compare it to TOTP created
+        if(success_or_not): #take the code inout by user, compare it to TOTP created
             print("Correct code!")
             #changeView(self.root_frame, HomeView)
 
@@ -102,10 +106,6 @@ class TokenView:
         #if self.callback != None:
         #    self.callback()
         #print("Button clicked")
-
-    def get_qr_text(self):
-        return self.qrCode.get()
-
 
 class FileEncryption:
     "Accepts: home_callback, encryption_callback"
