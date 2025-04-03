@@ -19,7 +19,7 @@ class QrView:
     # TODO: only post qr_code after AuthenticateView (AuthenticateView is untested)
     def __init__(self, parent : tk.Frame, **kwargs):
         self.callback = kwargs.get("callback", None)
-        text_variable = tk.tkinter.StringVar()
+        text_variable = tk.StringVar()
         # Configure rows' weights
         for x in range(0,5):
             parent.rowconfigure(x,weight=1)
@@ -200,12 +200,11 @@ class FileEncryption:
 
     def create_buttons(self):
         btn1 = tk.Button(self.holder, text="ENCRYPT", fg="white", bg="#007BFF", font=("Helvetica", 12, "bold"), command= lambda : self.encrypt_clicked(), relief="raised", bd=2)
-        btn2 = tk.Button(self.holder, text="HOME", fg="white", bg="#28a745", font=("Helvetica", 12, "bold"), command= lambda : self.home_clicked(), relief="raised", bd=2)
 
-        btn1.grid(row=self.row_count, column=0, columnspan=2)
-        btn2.grid(row=self.row_count, column=1, columnspan=2)
-
+        btn1.grid(row=self.row_count,columnspan=5)
         self.row_count += 1
+
+        create_directory(self.root, self.row_count)
 
     def encrypt_clicked(self):
         if self.encrypt_callback != None:
@@ -218,3 +217,18 @@ class FileEncryption:
             self.callback()
         # Placeholder for home button logic
         print("Home button clicked")
+
+def create_directory(root, row_count):
+        #TODO: Get currently active menu
+
+        holder = tk.Frame()
+        holder.grid(row=row_count, columnspan=5, sticky="ews")
+        for x in range(2):
+            holder.columnconfigure(x, weight=1)
+        tk.Button(holder, text="Auth", fg="white", bg="#28a745", font=("Helvetica", 12, "bold"), relief="raised", bd=2).grid(column=0, row=0, sticky="ew")
+        tk.Button(holder, text="File Upload", fg="white", bg="#28a745", font=("Helvetica", 12, "bold"), relief="raised", bd=2).grid(column=1, row=0, sticky="we")
+        tk.Button(holder, text="QR Generator", fg="white", bg="#28a745", font=("Helvetica", 12, "bold"), relief="raised", bd=2).grid(column=0, row=1, sticky="ew")
+        tk.Button(holder, text="Encrypt/Decrypt", fg="white", bg="#28a745", font=("Helvetica", 12, "bold"), relief="raised", bd=2, command= lambda : changeView(root, QrView)).grid(column=1, row=1, sticky="we")
+        
+        
+        row_count += 1
