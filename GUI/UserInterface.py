@@ -4,7 +4,7 @@ from tkinter import ttk
 from turtle import bgcolor
 #from tkinter import ttk, * imports everything
 from PIL import ImageTk, Image
-from BackEnd.Microsoft_Auth import authenticate_acct
+from BackEnd.Microsoft_Auth import authenticate_acct, create_one_time_password, verify_user_code
 
 global_image_list = [] # global image list to avoid the garbage collection 
 
@@ -16,7 +16,6 @@ def changeView(root : tk.Frame, view):
 class QrView:
     "Accepts: callback"
     # TODO: Createa a destructor to cleanup global image list
-    # TODO: only post qr_code after AuthenticateView (AuthenticateView is untested)
     def __init__(self, parent : tk.Frame, **kwargs):
         self.callback = kwargs.get("callback", None)
         text_variable = tk.StringVar()
@@ -24,68 +23,33 @@ class QrView:
         for x in range(0,5):
             parent.rowconfigure(x,weight=1)
 
-        qr_frame = tk.Frame(parent)
-
         # Add the elements to prompt the user to scan the generated QR image
         tk.Label(parent, text="2FA GENERATION", font=("TkDefaultFont", 18)).grid(row=1,column=0)
-
-        image = tk.PhotoImage(file="./Images/qr-code.png").subsample(x=6, y=6)
-        global_image_list.append(image)
-        tk.Label(parent, image=image).grid(row=2, column=0, rowspan=1)
         tk.Label(parent, text="Microsoft Authentication Username", font=("TkDefaultFont", 18)).grid(row=5,column=0)
-        tk.Entry(qr_frame, textvariable=text_variable, font=("TkDefaultFont", 12)).grid(row=0, column=1)
-        tk.Button(parent, text="Generate QR", width="21", command=lambda: self.button_clicked()).grid(
-            row=3, column=0, sticky="n")
+        tk.Entry(parent, textvariable=text_variable, font=("TkDefaultFont", 12)).grid(row=0, column=1)
+        tk.Button(parent, text="Generate QR", width="21", command=lambda: self.button_clicked_generate(text_variable)).grid(
+          column=0, row=5, sticky="n")
 
-    def button_clicked(self):
-        if self.callback != None:
-            self.callback()
-        print("Button clicked")
+    def button_clicked_generate(self, username):
+        authenticate_acct(username.get())
+        image = tk.PhotoImage(file = "./Images/qr-code.png").subsample(x=6, y=6)
+        global_image_list.append(image)
+        tk.Label(self.root_frame, image=image).grid(column=0, row=2, rowspan=1)
 
-class AuthenticateView:
-    "Accepts: callback"
-    # TODO: Creata destructor to cleanup global image list
+        tk.Button(self.root_frame, text="Authenticate code", width="21", command=lambda: self.button_clicked_auth()).grid(
+            column=0, row=5, sticky="n")
 
-    def __init__(self, parent : tk.Frame, **kwargs):
-        self.callback = kwargs.get("callback", None)
-        self.username = tk.StringVar()
-        self.code = tk.StringVar()
-
-        # Configure rows' and columns' weights
-        for x in range(0, 5):
-            parent.rowconfigure(x, weight=1)
-            parent.columnconfigure(x, weight=1)
-
-        tk.Label(parent).grid(row=1, column=2, columnspan=1, sticky="n")
-
-        for x in range(0,5):
-            parent.rowconfigure(x, weight=1)
-            parent.columnconfigure(x, weight=1)
-
-        tk.Label(parent, text="Enter username", font=("TkDefaultFont", 12)).grid(row=0, column=0)
-        tk.Entry(parent, textvariable=self.username, font=("TkDefaultFont", 12)).grid(row=0, column=1)
-
-        tk.Label(parent, text="Enter code", font=("TkDefaultFont", 12)).grid(row=1, column=0)
-        tk.Entry(parent, textvariable=self.code, font=("TkDefaultFont", 12)).grid(row=1, column=1)
-        tk.Button(parent, text="Submit", font=("TkDefaultFont", 12), command=lambda: self.button_clicked()).grid(
-            row=2, column=0, columnspan=2)
-
-    def button_clicked(self):
-        to_verify = authenticate_acct(self.username)
-
-        if(to_verify.verify(self.code)):
-            #if it's true
-            #https://www.geeksforgeeks.org/tkinter-application-to-switch-between-different-page-frames/
-            #IN HERE IT SHOULD CALL QR CODE
-            print("True, correct code")
-        else:
-            print("False >:(")
+    def button_clicked_auth(self):
+        changeView(self.root_frame, TokenView)
 
 class TokenView:
     "Accepts: callback"
     # TODO: Createa a destructor to cleanup global image list
+
     def __init__(self, parent : tk.Frame, **kwargs):
         self.qrCode = tk.StringVar()
+        self.username = tk.StringVar()
+        self.root_frame = parent
         self.callback = kwargs.get("callback", None)
 
         # Configure rows' and columns' weights
@@ -112,21 +76,18 @@ class TokenView:
             loginFrame.rowconfigure(x, weight=1)
             loginFrame.columnconfigure(x, weight=1)
 
-        tk.Label(loginFrame, text="2FA - Token", font=("TkDefaultFont", 12)).grid(column=0, row=0)
+        tk.Label(loginFrame, text="2FA - Token", font=("TkDefaultFont", 12)).grid(column=0, row=1)
+        tk.Entry(loginFrame, textvariable=self.qrCode, font=("TkDefaultFont", 12)).grid(column=1, row=1)
 
-        tk.Entry(loginFrame, textvariable=self.qrCode, font=("TkDefaultFont", 12)).grid(column=1, row=0)
+        tk.Button(loginFrame, text="Log In", font=("TkDefaultFont", 12), command= lambda : self.button_clicked_verify()).grid(column=0, row=2, columnspan=2)
 
-        tk.Button(loginFrame, text="Log In", font=("TkDefaultFont", 12), command= lambda : self.button_clicked()).grid(column=0, row=1, columnspan=2)
+    def button_clicked_verify(self):
+        str_qrcode = self.qrCode.get()
+        success_or_not = verify_user_code(str_qrcode, create_one_time_password())
 
-    def button_clicked(self):
-        print(self.get_qr_text())
-        if self.callback != None:
-            self.callback()
-        print("Button clicked")
-
-    def get_qr_text(self):
-        return self.qrCode.get()
-
+        if(success_or_not): #take the code inout by user, compare it to TOTP created
+            print("Correct code!")
+            #changeView(self.root_frame, HomeView)
 
 class FileEncryption:
     "Accepts: home_callback, encryption_callback"
