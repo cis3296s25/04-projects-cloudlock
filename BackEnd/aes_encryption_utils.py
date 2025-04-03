@@ -1,8 +1,10 @@
 import os.path
+import time
 from Crypto.Cipher import AES
 from Crypto.Random import get_random_bytes
 
-
+start_time = time.time()
+end_time = time.time()
 
 #Define absolute paths for AES key files
 #AES_KEY_PATH = os.path.join(AES_DIR, "aesKey.key")
@@ -95,6 +97,8 @@ def aes_encrypt(input_path, key):
     """
 
     # Read the data to be encrypted
+    global start_time = time.time()
+    
     with open (input_path, "rb") as f:
         data = f.read()
 
@@ -103,6 +107,8 @@ def aes_encrypt(input_path, key):
     cipher = AES.new(key, AES.MODE_GCM, nonce=nonce)  # Create an AES-GCM cipher object initialized with the key and nonce
     ciphertext, tag = cipher.encrypt_and_digest(data) # Encrypt the data and generate an authentication tag (returns ciphertext, tag)
 
+    global end_time = time.time()
+    
     return nonce + tag + ciphertext #first 12 bytes = nonce, next 16 bytes = tag, remaining = ciphertext
 
 def aes_decrypt(encrypted_path, key):
@@ -118,6 +124,8 @@ def aes_decrypt(encrypted_path, key):
     """
 
     # Check if the encrypted file exists
+    global start_time = time.time()
+    
     if not os.path.exists(encrypted_path):
         print(f"Encrypted file not found: {encrypted_path}")
         return
@@ -135,12 +143,20 @@ def aes_decrypt(encrypted_path, key):
     # Decrypt the data and verify the tag
     try:
         plaintext = cipher.decrypt_and_verify(ciphertext, tag)
+        global end_time = time.time()
+        
         return plaintext
     except ValueError:
         print("Decryption failed: Invalid tag or corrupted data.")
+        global end_time = time.time()
+        
         return
+      
+def aes_time():
+    total_time = end_time - start_time
+
+    return int(total_time)
 
 if __name__ == "__main__":
     key = generate_aes_key()
     print("AES Key: ", key)
-
