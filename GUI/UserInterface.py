@@ -5,6 +5,7 @@ from tkinter import *
 from PIL import ImageTk, Image
 from BackEnd.Microsoft_Auth import authenticate_acct, create_one_time_password, verify_user_code
 import BackEnd.file_search as fs
+import BackEnd.file_process as fp
 
 global_image_list = [] # global image list to avoid the garbage collection 
 current_frame = None
@@ -114,7 +115,10 @@ class FileEncryption:
     def __init__(self, parent, **kwargs):
         self.row_count = 0
         self.name = "fileencryption"
-        current_frame = self.name
+        
+        self.file = tk.StringVar()
+        self.name = tk.StringVar()
+        self.ext = tk.StringVar()
 
         for x in range(0,5):
             parent.rowconfigure(x,weight=1)
@@ -142,7 +146,7 @@ class FileEncryption:
     
     def create_file_path_entry(self):
         file_path_lbl = tk.Label(self.holder, text="File Path:", font=("Helvetica", 12))
-        file_path_entry = tk.Entry(self.holder, font=("Helvetica", 12), bd=2, relief="solid")
+        file_path_entry = tk.Entry(self.holder, textvariable=self.file, font=("Helvetica", 12), bd=2, relief="solid")
         file_path_browse = tk.Button(self.holder, text="Browse", font=("Helvetica", 12), command=lambda : browse())
 
         file_path_lbl.grid(row=self.row_count, column=0, sticky="e")
@@ -151,13 +155,13 @@ class FileEncryption:
 
         self.row_count += 1
         def browse():
-            file = fs.select_file()
-            print(file)
-            return
+            self.file.set(fs.select_file())
+            self.name.set(fp.get_name(self.file.get()))
+            self.ext.set(fp.get_ext(self.file.get()))
 
     def create_file_name_entry(self):
         file_name_lbl = tk.Label(self.holder, text="File Name:", font=("Helvetica", 12))
-        file_name_entry = tk.Label(self.holder, font=("Helvetica", 12), bd=2, relief="solid")
+        file_name_entry = tk.Label(self.holder, textvariable=self.name, font=("Helvetica", 12), bd=2, relief="solid")
 
         file_name_lbl.grid(row=self.row_count, column=0, sticky="e")
         file_name_entry.grid(row=self.row_count, column=1, sticky="ew")
@@ -175,7 +179,7 @@ class FileEncryption:
 
     def create_file_desc_entry(self):
         file_desc_lbl = tk.Label(self.holder, text="File Type:", font=("Helvetica", 12))
-        self.file_desc_entry = tk.Label(self.holder, font=("Helvetica", 12), bd=2, relief="solid")
+        self.file_desc_entry = tk.Label(self.holder, textvariable=self.ext, font=("Helvetica", 12), bd=2, relief="solid")
 
         file_desc_lbl.grid(row=self.row_count, column=0, sticky="e")
         self.file_desc_entry.grid(row=self.row_count, column=1, sticky="ew")
