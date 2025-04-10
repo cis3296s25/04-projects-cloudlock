@@ -1,3 +1,4 @@
+import time
 import os
 from file_search import *
 from BackEnd.aes_encryption_utils import generate_aes_key, aes_encrypt, aes_decrypt
@@ -12,6 +13,9 @@ from BackEnd.rsa_encryption_utils import (
 BASE_DIR = os.path.dirname(__file__)
 AES_DIR = os.path.join(BASE_DIR, "EncryptedAesKeys")
 ENCRYPTED_FILE_DIR = os.path.join(BASE_DIR, "EncryptedFiles")
+
+end_time = time.time()
+start_time = time.time()
 
 # Function to create directories for storing encrypted files and AES keys
 def setup_directories():
@@ -40,7 +44,9 @@ def hybrid_encrypt(input_file_path):
     Args:
         input_file_path (str): The path to the file to be encrypted.
     """
+    global start_time, end_time
 
+    start_time = time.time()
     # Setup directories for storing encrypted files and AES keys
     setup_directories()
 
@@ -69,6 +75,7 @@ def hybrid_encrypt(input_file_path):
 
     print(f"Encrypted file saved to: {encrypted_file_path}")
     print(f"Encrypted AES key saved to: {encrypted_key_path}")
+    end_time = time.time()
 
 #Hybrid Decryption Method
 def hybrid_decrypt(input_file_path,output_file_path):
@@ -83,6 +90,9 @@ def hybrid_decrypt(input_file_path,output_file_path):
         decrypted_data (bytes): The decrypted data.
     """
 
+    global start_time, end_time
+
+    start_time = time.time()
     #get the base name of the input file, and create paths for the encrypted file and AES key
     base_name = os.path.basename(input_file_path)
     encrypted_file_path = input_file_path
@@ -107,12 +117,19 @@ def hybrid_decrypt(input_file_path,output_file_path):
         df.write(decrypted_data)
 
     print(f"Decrypted file saved to: {output_file_path}")
+    end_time = time.time()
     return decrypted_data
 
+def aes_time():
+    total_time = (1000*end_time) - (1000*start_time)
+
+    return int(total_time) #this is ms!!!
 
 if __name__ == "__main__":
     file_to_encrypt = select_file()
     hybrid_encrypt(file_to_encrypt)
+    print(aes_time())
 
     file_to_decrypt = select_file()
     hybrid_decrypt(file_to_decrypt, select_save_as(file_to_decrypt))
+    print(aes_time())

@@ -1,8 +1,7 @@
 import os.path
+import time
 from Crypto.Cipher import AES
 from Crypto.Random import get_random_bytes
-
-
 
 #Define absolute paths for AES key files
 #AES_KEY_PATH = os.path.join(AES_DIR, "aesKey.key")
@@ -102,7 +101,7 @@ def aes_encrypt(input_path, key):
     nonce = get_random_bytes(12)  # Generate a random number used once
     cipher = AES.new(key, AES.MODE_GCM, nonce=nonce)  # Create an AES-GCM cipher object initialized with the key and nonce
     ciphertext, tag = cipher.encrypt_and_digest(data) # Encrypt the data and generate an authentication tag (returns ciphertext, tag)
-
+    
     return nonce + tag + ciphertext #first 12 bytes = nonce, next 16 bytes = tag, remaining = ciphertext
 
 def aes_decrypt(encrypted_path, key):
@@ -135,12 +134,13 @@ def aes_decrypt(encrypted_path, key):
     # Decrypt the data and verify the tag
     try:
         plaintext = cipher.decrypt_and_verify(ciphertext, tag)
+
         return plaintext
     except ValueError:
         print("Decryption failed: Invalid tag or corrupted data.")
+
         return
 
 if __name__ == "__main__":
     key = generate_aes_key()
     print("AES Key: ", key)
-
