@@ -10,7 +10,7 @@ import BackEnd.file_process as fp
 import BackEnd.Generate_Qr as qr
 
 global_image_list = {} # global image dictionary to avoid the garbage collection 
-current_frame = None
+current_name = None
 
 def changeView(root : tk.Frame, view):
     for child in root.winfo_children():
@@ -22,7 +22,7 @@ class QrView:
     # TODO: Createa a destructor to cleanup global image list
     def __init__(self, parent : tk.Frame, **kwargs):
         self.name = "qrview"
-        current_frame = self.name # Set the current frame name to qrview
+        current_name = self.name # Set the current frame name to qrview
         self.callback = kwargs.get("callback", None)
         self.root_frame = parent
         text_variable = StringVar()
@@ -81,7 +81,7 @@ class TokenView:
         self.callback = kwargs.get("callback", None)
 
         self.name = "tokenview"
-        current_frame = self.name
+        current_name = self.name
 
         # Configure rows' and columns' weights
         for x in range(0,5):
@@ -228,16 +228,28 @@ class FileEncryption:
         print("Home button clicked")
 
 def create_directory(root, row_count):
-        holder = tk.Frame()
+        holder = tk.Frame(root)
         holder.grid(row=row_count, columnspan=5, sticky="ews")
 
         for x in range(2):
             holder.columnconfigure(x, weight=1)
 
-        tk.Button(holder, text="Upload/Download", fg="white", bg=f"{"#28a745" if current_frame == "" else "#28a745"}", font=("Helvetica", 12, "bold"), 
+        tk.Button(holder, text="Upload", fg="white", bg=f"{"#28a745" if current_name == "" else "#28a745"}", font=("Helvetica", 12, "bold"), 
                   relief="raised", bd=2).grid(column=0, row=0, sticky="we")
-        tk.Button(holder, text="Encrypt/Decrypt", fg="white", bg="#28a745", font=("Helvetica", 12, "bold"), 
+        tk.Button(holder, text="Download", fg="white", bg="#28a745", font=("Helvetica", 12, "bold"), 
                   relief="raised", bd=2, command= lambda : changeView(root, QrView)).grid(row=0, column=1, sticky="we")
         
         
         row_count += 1
+
+
+class HomeView:
+    def __init__(self, parent):
+        self.name = "home"
+        current_name = self.name
+        for x in range(5):
+            parent.rowconfigure(x, weight=1)
+            parent.columnconfigure(x, weight=1)
+
+        tk.Label(parent, text="Home").grid(row=0, column=0, columnspan=5, sticky="news")
+        create_directory(parent, 4)
