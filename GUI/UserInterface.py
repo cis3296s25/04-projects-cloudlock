@@ -7,7 +7,6 @@ from turtle import width
 from PIL import ImageTk, Image
 from BackEnd.Microsoft_Auth import authenticate_acct, create_one_time_password, verify_user_code
 from BackEnd.hybrid_crypto import hybrid_encrypt, hybrid_decrypt
-from BackEnd.file_search import select_file, select_save_as
 import BackEnd.file_search as fs
 import BackEnd.file_process as fp
 import BackEnd.Generate_Qr as qr
@@ -223,13 +222,21 @@ class FileEncryption:
         create_directory(self.root, self.row_count)
 
     def encrypt_clicked(self):
-        if self.encrypt_callback != None:
+        #get the file path from the entry
+        file_path = self.file.get()
 
-            self.callback()
-        # Placeholder for encrypt logic
-        file_path = select_file(".*")
+        #check if the file path is empty
+        if not file_path:
+            print("No file selected.")
+            return
+
+        #call hybrid_encrypt method
         hybrid_encrypt(file_path)
-        print("Encrypt button clicked")
+
+        if self.encrypt_callback != None:
+            self.callback()
+
+        print("Encrypted file saved to: ", file_path)
 
     def home_clicked(self, **kwargs):
         if self.home_callback != None:
