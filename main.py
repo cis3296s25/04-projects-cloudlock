@@ -21,6 +21,5 @@ holder.grid(sticky="nesw")
 # ui.QrView(root)
 # ui.FileEncryption(root)
 # ui.TokenView(root)
-ui.HomeView(root)
 
 root.mainloop()

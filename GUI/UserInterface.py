@@ -242,14 +242,3 @@ def create_directory(root, row_count):
         
         row_count += 1
 
-
-class HomeView:
-    def __init__(self, parent):
-        self.name = "home"
-        current_name = self.name
-        for x in range(5):
-            parent.rowconfigure(x, weight=1)
-            parent.columnconfigure(x, weight=1)
-
-        tk.Label(parent, text="Home").grid(row=0, column=0, columnspan=5, sticky="news")
-        create_directory(parent, 4)
