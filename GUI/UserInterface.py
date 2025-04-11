@@ -4,7 +4,8 @@ from tkinter import *
 #* imports everything
 from PIL import ImageTk, Image
 from BackEnd.Microsoft_Auth import authenticate_acct, create_one_time_password, verify_user_code
-
+from BackEnd.hybrid_crypto import hybrid_encrypt, hybrid_decrypt
+from BackEnd.file_search import select_file, select_save_as
 global_image_list = [] # global image list to avoid the garbage collection 
 
 def changeView(root : tk.Frame, view):
@@ -170,8 +171,11 @@ class FileEncryption:
 
     def encrypt_clicked(self):
         if self.encrypt_callback != None:
+
             self.callback()
         # Placeholder for encrypt logic
+        file_path = select_file(".*")
+        hybrid_encrypt(file_path)
         print("Encrypt button clicked")
 
     def home_clicked(self, **kwargs):
