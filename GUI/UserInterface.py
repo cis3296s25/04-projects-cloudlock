@@ -183,7 +183,7 @@ class FileEncryption:
 
         self.row_count += 1
         def browse():
-            self.file.set(fs.select_file())
+            self.file.set(fs.select_file(".*"))
             self.name.set(fp.get_name(self.file.get()))
             self.ext.set(fp.get_ext(self.file.get()))
 
