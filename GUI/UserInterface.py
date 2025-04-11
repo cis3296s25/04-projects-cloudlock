@@ -127,6 +127,9 @@ class TokenView:
         str_qrcode = self.qrCode.get()
         success_or_not = verify_user_code(str_qrcode, create_one_time_password())
 
+        #Temp for demo
+        changeView(self.root_frame, FileEncryption)
+
         if(success_or_not): #take the code inout by user, compare it to TOTP created
             print("Correct code!")
             # changeView(self.root_frame, HomeView)
@@ -227,6 +230,25 @@ class FileEncryption:
         # Placeholder for home button logic
         print("Home button clicked")
 
+class DownloadView:
+    "Accepts: home_callback, encryption_callback"
+    def __init__(self, parent, **kwargs):
+        self.row_count = 0
+        self.name = "downloadview"
+
+        for x in range(0,5):
+            parent.rowconfigure(x,weight=1)
+            parent.columnconfigure(x, weight=1)
+
+        self.root = parent
+        tk.Label(parent, text="Download Cloud Files", font=("Helvetica", 16, "bold"), fg="#333").grid(row=0, column=0, columnspan=5, sticky="news")
+        tk.Label(parent, background="#e3d2d1").grid(row=1, rowspan=2,column=0, columnspan=5, sticky="news")
+
+        create_directory(parent, 5)
+
+        
+
+
 def create_directory(root, row_count):
         holder = tk.Frame(root)
         holder.grid(row=row_count, columnspan=5, sticky="ews")
@@ -235,9 +257,9 @@ def create_directory(root, row_count):
             holder.columnconfigure(x, weight=1)
 
         tk.Button(holder, text="Upload", fg="white", bg=f"{"#28a745" if current_name == "" else "#28a745"}", font=("Helvetica", 12, "bold"), 
-                  relief="raised", bd=2).grid(column=0, row=0, sticky="we")
+                  relief="raised", bd=2, command= lambda : changeView(root, FileEncryption)).grid(column=0, row=0, sticky="we")
         tk.Button(holder, text="Download", fg="white", bg="#28a745", font=("Helvetica", 12, "bold"), 
-                  relief="raised", bd=2, command= lambda : changeView(root, QrView)).grid(row=0, column=1, sticky="we")
+                  relief="raised", bd=2, command= lambda : changeView(root, DownloadView)).grid(row=0, column=1, sticky="we")
         
         
         row_count += 1
