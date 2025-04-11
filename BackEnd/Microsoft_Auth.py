@@ -6,15 +6,8 @@ import json
 # into a qr code instead of a link, and basically this random qr code is hooked up to the secret_key
 # then the function returns a pointer to the qr code image
 
-#IF THE FILE EXISTS OPEN FILE, SELECT DICTIONARY YOU WANT FOR USERNAME AND SECRET_KEY
-#OTHERWISE< IF USERNAME NOT IN FILE, MAKE NEW QR CODE WITH SCRETKEY
-#DONT DELETE THE DAMNED FILE
-
-#secret_key = pyotp.random_base32()
-#secret_key = base64.b32encode(b"6THUVVE5BKJG2DOXTSMYDD62BS2EWW2I")
-#SECRET_KEY = "6THUVVE5BKJG2DOXTSMYDD62BS2EWW2I"
-#I think secret_key needs to remain consistent for the userInterface to call these methods separately
-#but with the same value to link them together (secret_key)
+#qrview calls authenticate_acct() with username, makes qr code, changes view to tokenview which calls
+#verify_user_code() with the correct code from create_one_time_password() to verify user code.
 
 # Defining path and file for randomized qr code each time function is called
 BASE_DIR = os.path.dirname(__file__)
@@ -53,7 +46,6 @@ def get_secret_key(name_of_user):
         print("Qr verification link created")
 
         return randomized_code
-
 
 def authenticate_acct(name_of_user, secret_key):
     authentication_link = pyotp.totp.TOTP(secret_key).provisioning_uri(name_of_user,"CloudLockTeam")
