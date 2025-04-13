@@ -1,6 +1,6 @@
 import time
 import os
-from file_search import *
+from .file_search import *
 from BackEnd.aes_encryption_utils import generate_aes_key, aes_encrypt, aes_decrypt
 from BackEnd.rsa_encryption_utils import (
     create_rsa_keys,
@@ -126,10 +126,10 @@ def aes_time():
     return int(total_time) #this is ms!!!
 
 if __name__ == "__main__":
-    file_to_encrypt = select_file()
+    file_to_encrypt = select_file("*")
     hybrid_encrypt(file_to_encrypt)
     print(aes_time())
 
-    file_to_decrypt = select_file()
+    file_to_decrypt = select_file("*.enc")
     hybrid_decrypt(file_to_decrypt, select_save_as(file_to_decrypt))
     print(aes_time())

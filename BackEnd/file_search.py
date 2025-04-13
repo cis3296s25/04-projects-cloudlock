@@ -2,12 +2,12 @@ import os
 from tkinter import Tk, filedialog
 
 #Select a file using a GUI
-def select_file():
-
+def select_file(file_type):
     root = Tk()
     root.withdraw()  # Hide the root window
-    file_path = filedialog.askopenfilename(title="Select file", filetypes=[("files", "*")])  # Open file dialog to select a file
+    file_path = filedialog.askopenfilename(title="Select file", filetypes=[("files",file_type)])  # Open file dialog to select a file
     return file_path
+
 
 def select_save_as(encrypted_file_path):
 

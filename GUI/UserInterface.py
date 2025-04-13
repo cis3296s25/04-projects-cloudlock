@@ -6,12 +6,14 @@ from turtle import width
 #* imports everything
 from PIL import ImageTk, Image
 from BackEnd.Microsoft_Auth import authenticate_acct, create_one_time_password, verify_user_code
+from BackEnd.hybrid_crypto import hybrid_encrypt, hybrid_decrypt
 import BackEnd.file_search as fs
 import BackEnd.file_process as fp
 import BackEnd.Generate_Qr as qr
 
 global_image_list = {} # global image dictionary to avoid the garbage collection 
 current_name = None
+
 
 def changeView(root : tk.Frame, view):
     for child in root.winfo_children():
@@ -180,7 +182,7 @@ class FileEncryption:
 
         self.row_count += 1
         def browse():
-            self.file.set(fs.select_file())
+            self.file.set(fs.select_file(".*"))
             self.name.set(fp.get_name(self.file.get()))
             self.ext.set(fp.get_ext(self.file.get()))
 
@@ -220,10 +222,21 @@ class FileEncryption:
         create_directory(self.root, self.row_count)
 
     def encrypt_clicked(self):
+        #get the file path from the entry
+        file_path = self.file.get()
+
+        #check if the file path is empty
+        if not file_path:
+            print("No file selected.")
+            return
+
+        #call hybrid_encrypt method
+        hybrid_encrypt(file_path)
+
         if self.encrypt_callback != None:
             self.callback()
-        # Placeholder for encrypt logic
-        print("Encrypt button clicked")
+
+        print("Encrypted file saved to: ", file_path)
 
     def home_clicked(self, **kwargs):
         if self.home_callback != None:
