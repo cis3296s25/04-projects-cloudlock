@@ -3,9 +3,12 @@ import tkinter as tk
 from tkinter import *
 #* imports everything
 from PIL import ImageTk, Image
-from BackEnd.Microsoft_Auth import authenticate_acct, create_one_time_password, verify_user_code
+from BackEnd.Microsoft_Auth import authenticate_acct, create_one_time_password, verify_user_code, get_secret_key
+from BackEnd.hybrid_crypto import hybrid_encrypt
 
-global_image_list = [] # global image list to avoid the garbage collection 
+global_image_list = [] # global image list to avoid the garbage collection
+global_username = ""
+global_secret_key = ""
 
 def changeView(root : tk.Frame, view):
     for child in root.winfo_children():
@@ -24,15 +27,23 @@ class QrView:
         for x in range(0,5):
             parent.rowconfigure(x,weight=1)
 
+        global global_username, global_secret_key
+
         # Add the elements to prompt the user to scan the generated QR image
         tk.Label(parent, text="2FA GENERATION", font=("TkDefaultFont", 18)).grid(row=1,column=0)
         tk.Label(parent, text="Microsoft Authentication Username", font=("TkDefaultFont", 18)).grid(row=3,column=0)
         tk.Entry(parent, textvariable=text_variable, font=("TkDefaultFont", 12)).grid(row=4, column=0)
-        tk.Button(parent, text="Generate QR", width="21", command=lambda: self.button_clicked_generate(text_variable)).grid(
-          column=0, row=5, sticky="n")
+        global_username = text_variable.get()
+        global_secret_key = get_secret_key(global_username)
+        print(global_username)
+        print(global_secret_key)
 
-    def button_clicked_generate(self, username):
-        authenticate_acct(username.get())
+        tk.Button(parent, text="Generate QR", width="21",
+                  command=lambda: self.button_clicked_generate()).grid(
+            column=0, row=5, sticky="n")
+
+    def button_clicked_generate(self):
+        authenticate_acct(global_username, global_secret_key)
         image = tk.PhotoImage(file = "./Images/qr-code.png").subsample(x=6, y=6)
         global_image_list.append(image)
         tk.Label(self.root_frame, image=image).grid(column=0, row=2, rowspan=1)
@@ -84,16 +95,19 @@ class TokenView:
 
     def button_clicked_verify(self):
         str_qrcode = self.qrCode.get()
-        success_or_not = verify_user_code(str_qrcode, create_one_time_password())
+        one_time_code = create_one_time_password(global_secret_key)
+        success_or_not = verify_user_code(str_qrcode, one_time_code)
 
         if(success_or_not): #take the code inout by user, compare it to TOTP created
             print("Correct code!")
-            #changeView(self.root_frame, HomeView)
+            changeView(self.root_frame, FileEncryption)
 
 class FileEncryption:
     "Accepts: home_callback, encryption_callback"
     def __init__(self, parent, **kwargs):
         self.row_count = 0
+        self.root_frame = parent
+        self.filename = ""
 
         for x in range(0,5):
             parent.rowconfigure(x,weight=1)
@@ -168,9 +182,21 @@ class FileEncryption:
 
         create_directory(self.root, self.row_count)
 
+    def success_window(self):
+        # TODO: hybrid_encrypt() and decrypt() return Boolean for success
+        top = Toplevel(self.root_frame)
+        top.geometry("500x200")
+        top.title("Success")
+        time_taken = aes_time()
+        Label(top, text=("Time taken: " + time_taken), font=("Tk Default Font", 12)).place(x=150, y=50)
+        Label(top, text=("File encrypted: " + self.filename), font=("Tk Default Font", 12)).place(x=150, y=100)
+
     def encrypt_clicked(self):
         if self.encrypt_callback != None:
             self.callback()
+
+        if(hybrid_encrypt():
+            success_window()
         # Placeholder for encrypt logic
         print("Encrypt button clicked")
 
