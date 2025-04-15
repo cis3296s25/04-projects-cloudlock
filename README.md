@@ -21,7 +21,7 @@ CloudLock is a desktop application that uses secure file and image encryption sy
   python main.py
   ```
 
-- Complete Google two-factor authentication to log in.
+- Complete Miscrosoft two-factor authentication to log in.
 - Select the option to encrypt or decrypt a file.
 - Choose the file and enter the public key.
 - Press the button to process the file.
