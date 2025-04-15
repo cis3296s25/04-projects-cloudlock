@@ -1,6 +1,6 @@
 import time
 import os
-from .file_search import *
+from BackEnd.file_search import *
 from BackEnd.aes_encryption_utils import generate_aes_key, aes_encrypt, aes_decrypt
 from BackEnd.rsa_encryption_utils import (
     create_rsa_keys,
@@ -76,6 +76,12 @@ def hybrid_encrypt(input_file_path):
     print(f"Encrypted file saved to: {encrypted_file_path}")
     print(f"Encrypted AES key saved to: {encrypted_key_path}")
     end_time = time.time()
+
+    if(os.path.isfile(encrypted_file_path)):
+        #if the file was successfully made
+        return True
+    else:
+        return False
 
 #Hybrid Decryption Method
 def hybrid_decrypt(input_file_path,output_file_path):

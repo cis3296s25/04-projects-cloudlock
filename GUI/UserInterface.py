@@ -1,9 +1,19 @@
 "Collection of classes to display user interface"
 import tkinter as tk
+from tkinter import ttk
 from tkinter import *
+<<<<<<< Updated upstream
+from turtle import width
+=======
+from tkinter import ttk
+>>>>>>> Stashed changes
 #* imports everything
 from PIL import ImageTk, Image
-from BackEnd.Microsoft_Auth import authenticate_acct, create_one_time_password, verify_user_code, get_secret_key
+from BackEnd.Microsoft_Auth import *
+from BackEnd.hybrid_crypto import *
+import BackEnd.file_search as fs
+import BackEnd.file_process as fp
+import BackEnd.Generate_Qr as qr
 
 global_image_list = [] # global image list to avoid the garbage collection
 global_username = ""
@@ -35,18 +45,15 @@ class QrView:
 
         # Add the elements to prompt the user to scan the generated QR image
         tk.Label(parent, text="2FA GENERATION", font=("TkDefaultFont", 18)).grid(row=0,column=0)
-        tk.Label(parent, text="Microsoft Authentication Username", font=("TkDefaultFont", 18)).grid(row=3,column=0)
-        tk.Entry(parent, textvariable=text_variable, font=("TkDefaultFont", 12)).grid(row=4, column=0)
+        tk.Label(parent, text="Microsoft Authentication Username", font=("TkDefaultFont", 18)).grid(row=2,column=0)
+        tk.Entry(parent, textvariable=text_variable, font=("TkDefaultFont", 12)).grid(row=3, column=0)
         global_username = text_variable.get()
         global_secret_key = get_secret_key(global_username)
 
         self.qrImage = tk.Label(self.root_frame, width=2, height=2)
         self.qrImage.grid(column=0, row=1, sticky="news")
 
-        tk.Label(parent, text="Microsoft Authentication Username", font=("TkDefaultFont", 18)).grid(row=2,column=0)
-        tk.Entry(parent, textvariable=text_variable, font=("TkDefaultFont", 12)).grid(row=3, column=0)
-
-        self.generate_widget = tk.Button(parent, text="Generate QR", width="20", command=lambda: self.button_clicked_generate(text_variable))
+        self.generate_widget = tk.Button(parent, text="Generate QR", width="20", command=lambda: self.button_clicked_generate())
         self.generate_widget.grid(row=4, column=0, sticky="n")
 
         # If we already have a stored image, load it back
@@ -58,7 +65,7 @@ class QrView:
         authenticate_acct(global_username, global_secret_key)
         image = tk.PhotoImage(file = "./Images/qr-code.png").subsample(x=6, y=6)
         global_image_list.append(image)
-        tk.Label(self.root_frame, image=image).grid(column=0, row=2, rowspan=1)
+        tk.Label(self.root_frame, image=image).grid(column=0, row=1, rowspan=1)
 
         tk.Button(self.root_frame, text="Authenticate code", width="21", command=lambda: self.button_clicked_auth()).grid(
             column=0, row=5, sticky="n")
@@ -247,7 +254,10 @@ class FileEncryption:
             return
 
         #call hybrid_encrypt method
-        hybrid_encrypt(file_path)
+        if(hybrid_encrypt(file_path)):
+            print("Successfully enrcypted")
+            #success_window()
+            #call the success_window popup which needs to be tested
 
         if self.encrypt_callback != None:
             self.callback()
