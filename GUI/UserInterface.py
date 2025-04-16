@@ -37,7 +37,7 @@ class QrView:
         # Add the elements to prompt the user to scan the generated QR image
         tk.Label(parent, text="2FA GENERATION", font=("TkDefaultFont", 18)).grid(row=0,column=0)
         tk.Label(parent, text="Microsoft Authentication Username", font=("TkDefaultFont", 18)).grid(row=2,column=0)
-        tk.Entry(parent, textvariable=username, font=("TkDefaultFont", 12)).grid(row=3, column=0)
+        tk.Entry(parent, textvariable=self.username, font=("TkDefaultFont", 12)).grid(row=3, column=0)
 
         self.qrImage = tk.Label(self.root, width=2, height=2)
         self.qrImage.grid(column=0, row=1, sticky="news")
@@ -51,9 +51,9 @@ class QrView:
             self.Auth_Create()
 
     def Generate_Event(self):
-        global_username = self.username
+        global_username = self.username.get()
         global_secret_key = get_secret_key(global_username)
-        
+
         authenticate_acct(global_username, global_secret_key)
         self.Generate_Image()
         self.Auth_Create()
