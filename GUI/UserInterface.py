@@ -2,8 +2,6 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter import *
-
-from turtle import width
 from PIL import ImageTk, Image
 from BackEnd.Microsoft_Auth import *
 from BackEnd.hybrid_crypto import *
@@ -11,7 +9,7 @@ import BackEnd.file_search as fs
 import BackEnd.file_process as fp
 import BackEnd.Generate_Qr as qr
 
-global_image_list = [] # global image list to avoid the garbage collection
+global_image_list = {} # global image object to avoid the garbage collection
 global_username = ""
 global_secret_key = ""
 current_name = None
@@ -25,61 +23,53 @@ def changeView(root : tk.Frame, view):
 class QrView:
     "Accepts: callback"
     # TODO: Createa a destructor to cleanup global image list
-    def __init__(self, parent : tk.Frame, **kwargs):
+    def __init__(self, parent : tk.Frame):
         self.name = "qrview"
         current_name = self.name # Set the current frame name to qrview
-        self.callback = kwargs.get("callback", None)
-        self.root_frame = parent
-        text_variable = StringVar()
+        self.root = parent
+        self.username = StringVar(self.root)
 
         # Configure rows' weights
         for x in range(0,5):
-            parent.rowconfigure(x,weight=1, uniform="row")
-            parent.columnconfigure(x,weight=1)
-
-        global global_username, global_secret_key
+            self.root.rowconfigure(x,weight=1, uniform="row")
+            self.root.columnconfigure(x,weight=1)
 
         # Add the elements to prompt the user to scan the generated QR image
         tk.Label(parent, text="2FA GENERATION", font=("TkDefaultFont", 18)).grid(row=0,column=0)
         tk.Label(parent, text="Microsoft Authentication Username", font=("TkDefaultFont", 18)).grid(row=2,column=0)
-        tk.Entry(parent, textvariable=text_variable, font=("TkDefaultFont", 12)).grid(row=3, column=0)
-        global_username = text_variable.get()
-        global_secret_key = get_secret_key(global_username)
+        tk.Entry(parent, textvariable=username, font=("TkDefaultFont", 12)).grid(row=3, column=0)
 
-        self.qrImage = tk.Label(self.root_frame, width=2, height=2)
+        self.qrImage = tk.Label(self.root, width=2, height=2)
         self.qrImage.grid(column=0, row=1, sticky="news")
 
-        self.generate_widget = tk.Button(parent, text="Generate QR", width="20", command=lambda: self.button_clicked_generate())
+        self.generate_widget = tk.Button(parent, text="Generate QR", width="20", command=lambda: self.Generate_Event())
         self.generate_widget.grid(row=4, column=0, sticky="n")
 
         # If we already have a stored image, load it back
         if "QrImage" in global_image_list:
             self.qrImage.configure(image=global_image_list["QrImage"])
-            self.generate_auth_button()
+            self.Auth_Create()
 
-    def button_clicked_generate(self):
+    def Generate_Event(self):
+        global_username = self.username
+        global_secret_key = get_secret_key(global_username)
+        
         authenticate_acct(global_username, global_secret_key)
-        image = tk.PhotoImage(file = "./Images/qr-code.png").subsample(x=6, y=6)
-        global_image_list.append(image)
-        tk.Label(self.root_frame, image=image).grid(column=0, row=1, rowspan=1)
+        self.Generate_Image()
+        self.Auth_Create()
 
-        tk.Button(self.root_frame, text="Authenticate code", width="21", command=lambda: self.button_clicked_auth()).grid(
-            column=0, row=5, sticky="n")
-        self.generate_qr_image()
-        self.generate_auth_button()
+    def Auth_Event(self):
+        changeView(self.root, TokenView)
 
-    def button_clicked_auth(self):
-        changeView(self.root_frame, TokenView)
-
-    def generate_auth_button(self):
-        holder = tk.Frame(self.root_frame)
-        holder.grid(row=4, column=0, sticky="n")
-        tk.Button(holder, text="Authenticate Code", width="20", command=lambda: self.button_clicked_auth()).grid(row=0, column=0, pady=5)
-        tk.Button(holder, text="Generate New Code", width="20", command=lambda: self.generate_qr_image()).grid(row=1, column=0, pady=5)
-
+    def Auth_Create(self):
         self.generate_widget.destroy()
+        holder = tk.Frame(self.root)
+        holder.grid(row=4, column=0, sticky="n")
+        tk.Button(holder, text="Authenticate Code", width="20", command=lambda: self.Auth_Event()).grid(row=0, column=0, pady=5)
+        tk.Button(holder, text="Generate New Code", width="20", command=lambda: self.Generate_Image()).grid(row=1, column=0, pady=5)
 
-    def generate_qr_image(self):
+
+    def Generate_Image(self):
         image = qr.QrImage("Hello world", self.qrImage)
         global_image_list["QrImage"] = image
         self.qrImage.config(image=image)
