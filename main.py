@@ -19,8 +19,8 @@ holder.rowconfigure(0, weight=1)
 holder.grid(sticky="nesw")
 
 ui.QrView(root)
-# ui.FileEncryption(root)
 # ui.TokenView(root)
+# ui.FileEncryption(root)
 # ui.DownloadView(root)
 # ui.Cloud(root)
 

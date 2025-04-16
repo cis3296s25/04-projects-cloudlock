@@ -10,9 +10,9 @@ import BackEnd.file_process as fp
 import BackEnd.Generate_Qr as qr
 
 global_image_list = {} # global image object to avoid the garbage collection
+current_name = None
 global_username = ""
 global_secret_key = ""
-current_name = None
 
 
 def changeView(root : tk.Frame, view):
@@ -53,8 +53,7 @@ class QrView:
     def Generate_Event(self):
         global_username = self.username.get()
         global_secret_key = get_secret_key(global_username)
-
-        authenticate_acct(global_username, global_secret_key)
+        self.link = authenticate_acct(global_username, global_secret_key)
         self.Generate_Image()
         self.Auth_Create()
 
@@ -66,18 +65,16 @@ class QrView:
         holder = tk.Frame(self.root)
         holder.grid(row=4, column=0, sticky="n")
         tk.Button(holder, text="Authenticate Code", width="20", command=lambda: self.Auth_Event()).grid(row=0, column=0, pady=5)
-        tk.Button(holder, text="Generate New Code", width="20", command=lambda: self.Generate_Image()).grid(row=1, column=0, pady=5)
+        tk.Button(holder, text="Generate New Code", width="20", command=lambda: self.Generate_Event()).grid(row=1, column=0, pady=5)
 
 
     def Generate_Image(self):
-        image = qr.QrImage("Hello world", self.qrImage)
-        global_image_list["QrImage"] = image
-        self.qrImage.config(image=image)
+        self.image = qr.QrImage(self.link, self.qrImage)
+        global_image_list["QrImage"] = self.image
+        self.qrImage.config(image=self.image)
 
 class TokenView:
     "Accepts: callback"
-    # TODO: Createa a destructor to cleanup global image list
-
     def __init__(self, parent : tk.Frame, **kwargs):
         self.qrCode = tk.StringVar()
         self.username = tk.StringVar()
@@ -103,12 +100,12 @@ class TokenView:
         tk.Label(info_frame, text="2FA Authentication", font=("TkDefaultFont", 18)).grid(row=0, column=1, sticky="ns")
 
         # Create image using PIL (required for .jpg files)
-        image = Image.open("./Images/2fa.jpg")
-        image = image.resize((300,200))
-        image= ImageTk.PhotoImage(image)
-        global_image_list["2fa"] = image
+        self.image = Image.open("./Images/2fa.jpg")
+        self.image = self.image.resize((300,200))
+        self.image= ImageTk.PhotoImage(self.image)
+        global_image_list["2fa"] = self.image
 
-        tk.Label(parent, image=image).grid(row=1, column=0, columnspan=5)
+        tk.Label(parent, image=self.image).grid(row=1, column=0, columnspan=5)
 
         # Create another frame to hold the information
         loginFrame = tk.Frame(parent)
@@ -137,9 +134,11 @@ class TokenView:
             print("Correct code!")
             changeView(self.root_frame, FileEncryption)
 
+    def __del__(self):
+        del self.image
+
 class FileEncryption:
-    "Accepts: home_callback, encryption_callback"
-    def __init__(self, parent, **kwargs):
+    def __init__(self, parent):
         self.row_count = 0
         self.name = "fileencryption"
 
@@ -152,8 +151,6 @@ class FileEncryption:
             parent.columnconfigure(x, weight=1)
 
         self.root = parent
-        self.encrypt_callback = kwargs.get("encrypt_callback")
-        self.home_callback = kwargs.get("home_callback")
         self.holder = tk.Frame(parent)
         for x in range(3):
             self.holder.rowconfigure(x,weight=1)
