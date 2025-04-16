@@ -3,7 +3,6 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import *
 from turtle import width
-#* imports everything
 from PIL import ImageTk, Image
 from BackEnd.Microsoft_Auth import authenticate_acct, create_one_time_password, verify_user_code
 import BackEnd.file_search as fs
@@ -350,6 +349,3 @@ class Cloud:
     def upload_clicked(self):
         print("Upload button clicked")
 
-root = tk.Tk()
-app = Cloud(root)
-root.mainloop()
