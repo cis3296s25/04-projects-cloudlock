@@ -2,12 +2,8 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter import *
-<<<<<<< Updated upstream
+
 from turtle import width
-=======
-from tkinter import ttk
->>>>>>> Stashed changes
-#* imports everything
 from PIL import ImageTk, Image
 from BackEnd.Microsoft_Auth import *
 from BackEnd.hybrid_crypto import *
@@ -389,6 +385,3 @@ class Cloud:
     def upload_clicked(self):
         print("Upload button clicked")
 
-root = tk.Tk()
-app = Cloud(root)
-root.mainloop()
