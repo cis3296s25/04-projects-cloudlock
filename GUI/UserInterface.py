@@ -206,7 +206,7 @@ class FileEncryption:
     
     def create_file_path_entry(self):
         file_path_lbl = tk.Label(self.holder, text="File Path:", font=("Helvetica", 12))
-        file_path_entry = tk.Entry(self.holder, textvariable=self.file, font=("Helvetica", 12), bd=2, relief="solid")
+        file_path_entry = tk.Entry(self.holder, textvariable=self.file, font=("Helvetica", 12), bd=2, relief="solid", width=20)
         file_path_browse = tk.Button(self.holder, text="Browse", font=("Helvetica", 12), command=lambda : browse())
 
         file_path_lbl.grid(row=self.row_count, column=0, sticky="e")
@@ -221,7 +221,7 @@ class FileEncryption:
 
     def create_file_name_entry(self):
         file_name_lbl = tk.Label(self.holder, text="File Name:", font=("Helvetica", 12))
-        file_name_entry = tk.Label(self.holder, textvariable=self.name, font=("Helvetica", 12), bd=2, relief="solid")
+        file_name_entry = tk.Label(self.holder, textvariable=self.name, font=("Helvetica", 12), bd=2, relief="solid", width=20)
 
         file_name_lbl.grid(row=self.row_count, column=0, sticky="e")
         file_name_entry.grid(row=self.row_count, column=1, sticky="ew")
