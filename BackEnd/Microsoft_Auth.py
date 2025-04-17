@@ -17,22 +17,22 @@ AUTH_PATH = os.path.join(QR_DIR, "authentication_value.json")
 def get_secret_key(name_of_user):
     randomized_code = pyotp.random_base32()
 
-    if os.path.exists(QR_DIR):
-        print("Directory 'AuthenticationCredentials' already established.")
-    else:
+    #if os.path.exists(QR_DIR):
+        #print("Directory 'AuthenticationCredentials' already established.")
+    if not (os.path.exists(QR_DIR)):
         #if the folder doesn't exist, neither does the file. Make one.
         os.makedirs(QR_DIR)
 
         with open(AUTH_PATH, "w") as qrFile:
             dictionary_written = {name_of_user: randomized_code}
             json.dump(dictionary_written, qrFile, indent=4)
-        print("Directory 'AuthenticationCredentials' and json file created.")
+        #print("Directory 'AuthenticationCredentials' and json file created.")
 
     # ---------------------------------------------------------------------------------------------------------
 
     with open(AUTH_PATH, 'r') as qrFile:
         data = json.load(qrFile)
-        print("Qr verification link: ", data)
+        #print("Qr verification link: ", data)
 
         if data.get(name_of_user, 0) != 0:
             #if it exists
@@ -43,7 +43,7 @@ def get_secret_key(name_of_user):
     with open(AUTH_PATH, "w") as qrFile:
         data[name_of_user] = randomized_code
         json.dump(data, qrFile, indent=4)
-        print("Qr verification link created")
+        #print("Qr verification link created")
 
         return randomized_code
 
@@ -54,7 +54,8 @@ def authenticate_acct(name_of_user, secret_key):
     )
     #name_of_user is their google authenticator username and CloudLockTeam is the name of the issuer
     #creates the account for the user that is connected to the secret_key
-    print(authentication_link)
+
+    #print(authentication_link)
     return authentication_link
 
 def create_one_time_password(secret_key):
