@@ -29,20 +29,20 @@ class QrView:
         self.username = StringVar(self.root)
 
         # Configure rows' weights
-        for x in range(0,5):
+        for x in range(9):
             self.root.rowconfigure(x,weight=1, uniform="row")
             self.root.columnconfigure(x,weight=1)
 
         # Add the elements to prompt the user to scan the generated QR image
         tk.Label(parent, text="2FA GENERATION", font=("TkDefaultFont", 18)).grid(row=0,column=0)
-        tk.Label(parent, text="Microsoft Authentication Username", font=("TkDefaultFont", 18)).grid(row=2,column=0)
-        tk.Entry(parent, textvariable=self.username, font=("TkDefaultFont", 12)).grid(row=3, column=0)
+        tk.Label(parent, text="Microsoft Authentication Username", font=("TkDefaultFont", 18)).grid(row=4,column=0)
+        tk.Entry(parent, textvariable=self.username, font=("TkDefaultFont", 12)).grid(row=5, column=0)
 
         self.qrImage = tk.Label(self.root, width=2, height=2)
         self.qrImage.grid(column=0, row=1, sticky="news")
 
         self.generate_widget = tk.Button(parent, text="Generate QR", width="20", command=lambda: self.Generate_Event())
-        self.generate_widget.grid(row=4, column=0, sticky="n")
+        self.generate_widget.grid(row=7, column=0, sticky="n")
 
         # If we already have a stored image, load it back
         if "QrImage" in global_image_list:
@@ -79,10 +79,8 @@ class QrView:
     def Auth_Create(self):
         self.generate_widget.destroy()
         holder = tk.Frame(self.root)
-        holder.grid(row=4, column=0, sticky="n")
-        tk.Button(holder, text="Authenticate Code", width="20", command=lambda: self.Auth_Event()).grid(row=0, column=0, pady=5)
-        tk.Button(holder, text="Generate New Code", width="20", command=lambda: self.Generate_Event()).grid(row=1, column=0, pady=5)
-
+        holder.grid(row=8, column=0, sticky="n")
+        tk.Button(holder, text="Authenticate Code", width="20", command=lambda: self.Auth_Event()).grid(row=4, column=0, pady=5)
 
     def Generate_Image(self):
         self.image = qr.QrImage(self.link, self.qrImage)
@@ -101,14 +99,14 @@ class TokenView:
         current_name = self.name
 
         # Configure rows' and columns' weights
-        for x in range(0,5):
+        for x in range(9):
             parent.rowconfigure(x,weight=1)
             parent.columnconfigure(x, weight=1)
 
         info_frame = tk.Frame(parent)
         info_frame.grid(row=0, columnspan=5, sticky="ew")
 
-        for x in range(0,5):
+        for x in range(9):
             info_frame.rowconfigure(x,weight=1)
             info_frame.columnconfigure(x, weight=1)
 
@@ -128,7 +126,7 @@ class TokenView:
         loginFrame.grid(row=2, column=2, rowspan=5, sticky="nesw")
         
         # Setup the rows and columns in the loginFrame
-        for x in range(0,5):
+        for x in range(9):
             loginFrame.rowconfigure(x, weight=1)
             loginFrame.columnconfigure(x, weight=1)
 
@@ -162,7 +160,7 @@ class FileEncryption:
         self.name = tk.StringVar()
         self.ext = tk.StringVar()
 
-        for x in range(0,5):
+        for x in range(9):
             parent.rowconfigure(x,weight=1)
             parent.columnconfigure(x, weight=1)
 
@@ -233,7 +231,7 @@ class FileEncryption:
         btn2.grid(row=self.row_count, column=1, columnspan=2)
         self.row_count += 1
 
-        create_directory(self.root, self.row_count)
+        create_directory(self.root, self.row_count+4)
 
     def success_window(self,encrypt_or_decrypt):
         # TODO: hybrid_encrypt() and decrypt() return Boolean for success
@@ -295,7 +293,7 @@ class DownloadView:
     def __init__(self, parent, **kwargs):
         self.row_count = 0
         self.name = "downloadview"
-        for x in range(0,5):
+        for x in range(9):
 
             parent.rowconfigure(x,weight=1)
             parent.columnconfigure(x, weight=1)
@@ -304,7 +302,7 @@ class DownloadView:
         tk.Label(parent, text="Download Cloud Files", font=("Helvetica", 16, "bold"), fg="#333").grid(row=0, column=0, columnspan=5, sticky="news")
         tk.Label(parent, background="#e3d2d1").grid(row=1, rowspan=2,column=0, columnspan=5, sticky="news")
 
-        create_directory(parent, 5)
+        create_directory(parent, 8)
 
 def create_directory(root, row_count):
         holder = tk.Frame(root)
