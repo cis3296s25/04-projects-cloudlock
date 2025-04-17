@@ -325,6 +325,10 @@ class Cloud:
     def __init__(self, root):
         self.root = root
         self.root.config(bg="#f7f7f7")  #a lighter background
+        
+        self.file = tk.StringVar()
+        self.name = tk.StringVar()
+        self.ext = tk.StringVar()
 
         for x in range(9):
             self.root.rowconfigure(x, weight=1)
@@ -337,37 +341,40 @@ class Cloud:
         s3_bucket_lbl.grid(row=1, column=0, sticky="e")
         
         self.s3_bucket_entry = ttk.Entry(self.root, font=("Helvetica", 12))
-        self.s3_bucket_entry.grid(row=1, column=1)
+        self.s3_bucket_entry.grid(row=1, column=1, sticky="ew")
 
         access_key_lbl = tk.Label(self.root, text="Access Key:", font=("Helvetica", 12), bg="#f7f7f7")
         access_key_lbl.grid(row=2, column=0, sticky="e")
 
         self.access_key_entry = ttk.Entry(self.root, font=("Helvetica", 12))
-        self.access_key_entry.grid(row=2, column=1)
+        self.access_key_entry.grid(row=2, column=1, sticky="ew")
 
         secret_key_lbl = tk.Label(self.root, text="Secret Key:", font=("Helvetica", 12), bg="#f7f7f7")
         secret_key_lbl.grid(row=3, column=0, sticky="e")
 
         self.secret_key_entry = ttk.Entry(self.root, font=("Helvetica", 12))
-        self.secret_key_entry.grid(row=3, column=1)
+        self.secret_key_entry.grid(row=3, column=1, sticky="ew")
         
         file_path_lbl = tk.Label(self.root, text="File Path:", font=("Helvetica", 12), bg="#f7f7f7")
         file_path_lbl.grid(row=4, column=0, sticky="e")
 
-        self.file_path_entry = ttk.Entry(self.root, font=("Helvetica", 12))
-        self.file_path_entry.grid(row=4, column=1)
+        self.file_path_entry = ttk.Entry(self.root, textvariable=self.file, font=("Helvetica", 12))
+        self.file_path_entry.grid(row=4, column=1, sticky="ew")
+
+        browseFile = tk.Button(self.root, text="Browse", command=self.browseFile_clicked)
+        browseFile.grid(row=4,column=2, sticky="w")
 
         file_name_lbl = tk.Label(self.root, text="File Name:", font=("Helvetica", 12), bg="#f7f7f7")
         file_name_lbl.grid(row=5, column=0, sticky="e")
 
-        self.file_name_entry = ttk.Entry(self.root, font=("Helvetica", 12))
-        self.file_name_entry.grid(row=5, column=1)
+        self.file_name_entry = ttk.Entry(self.root, textvariable=self.name, font=("Helvetica", 12))
+        self.file_name_entry.grid(row=5, column=1, sticky="ew")
 
         file_type_lbl = tk.Label(self.root, text="File Type:", font=("Helvetica", 12), bg="#f7f7f7")
         file_type_lbl.grid(row=6, column=0, sticky="e")
 
-        self.file_type_entry = ttk.Entry(self.root, font=("Helvetica", 12))
-        self.file_type_entry.grid(row=6, column=1)
+        self.file_type_entry = ttk.Entry(self.root, textvariable=self.ext, font=("Helvetica", 12))
+        self.file_type_entry.grid(row=6, column=1, sticky="ew")
 
         
         # styling for buttons
@@ -380,23 +387,16 @@ class Cloud:
         for x in range(3):
             self.holder.columnconfigure(x, weight=1)
 
-        loadFile = tk.Button(self.holder, text="Load File", command=self.loadFile_clicked)
-        loadFile.grid(row=0,column=0)
-
-        download = tk.Button(self.holder, text="Download", command=self.download_clicked)
-        download.grid(row=0,column=1)
-
         upload = tk.Button(self.holder, text="Upload", command=self.upload_clicked)
-        upload.grid(row=0,column=2)
+        upload.grid(row=0,column=1)
 
         create_directory(self.root, 8)
 
     # button click functions
-    def loadFile_clicked(self):
-        print("Load File button clicked")
-
-    def download_clicked(self):
-        print("Download button clicked")
+    def browseFile_clicked(self):
+        self.file.set(fs.select_file(".*"))
+        self.name.set(fp.get_name(self.file.get()))
+        self.ext.set(fp.get_ext(self.file.get()))
 
     def upload_clicked(self):
         print("Upload button clicked")
