@@ -257,12 +257,12 @@ class FileEncryption:
 
     def success_window(self):
         # TODO: hybrid_encrypt() and decrypt() return Boolean for success
-        top = Toplevel(self.root_frame)
+        top = Toplevel(self.root)
         top.geometry("500x200")
         top.title("Success")
         time_taken = aes_time()
         Label(top, text=("Time taken: " + time_taken), font=("Tk Default Font", 12)).place(x=150, y=50)
-        Label(top, text=("File encrypted: " + self.filename), font=("Tk Default Font", 12)).place(x=150, y=100)
+        Label(top, text=("File encrypted: " + self.name.get()), font=("Tk Default Font", 12)).place(x=150, y=100)
 
     def encrypt_clicked(self):
         #get the file path from the entry
@@ -276,8 +276,7 @@ class FileEncryption:
         #call hybrid_encrypt method
         if(hybrid_encrypt(file_path)):
             print("Successfully enrcypted")
-            #success_window()
-            #call the success_window popup which needs to be tested
+            self.success_window()
 
         if self.encrypt_callback != None:
             self.callback()
@@ -285,6 +284,26 @@ class FileEncryption:
         print("Encrypted file saved to: ", file_path)
 
     def decrypt_clicked(self):
+        #get the file path from the entry
+        file_path = self.file.get()
+
+        #check if the file path is empty
+        if not file_path:
+            print("No file selected.")
+            return
+        
+        #select the save as file path
+        save_path = fs.select_save_as(file_path)
+
+        #check if the save path is empty
+        if not save_path:
+            print("No save path selected.")
+            return
+
+        #call hybrid_decrypt method
+        if(hybrid_decrypt(file_path, save_path)):
+            print("Successfully decrypted")
+            self.success_window()
 
         print("Decrypt button clicked")
 
