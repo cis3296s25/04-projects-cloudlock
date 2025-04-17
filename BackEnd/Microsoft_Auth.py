@@ -55,7 +55,6 @@ def authenticate_acct(name_of_user, secret_key):
     #name_of_user is their google authenticator username and CloudLockTeam is the name of the issuer
     #creates the account for the user that is connected to the secret_key
     print(authentication_link)
-
     return authentication_link
 
 def create_one_time_password(secret_key):
