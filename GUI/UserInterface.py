@@ -14,7 +14,6 @@ current_name = None
 global_username = ""
 global_secret_key = ""
 
-
 def changeView(root : tk.Frame, view):
     for child in root.winfo_children():
         child.destroy()
