@@ -326,53 +326,53 @@ class Cloud:
         self.root = root
         self.root.config(bg="#f7f7f7")  #a lighter background
 
-        for x in range(8):
+        for x in range(9):
             self.root.rowconfigure(x, weight=1)
             self.root.columnconfigure(x, weight=1)
 
-        title_lbl = tk.Label(self.root, text='File Cloud Upload', font=("Segoe UI", 22), fg="black", bg="#f7f7f7")
+        title_lbl = tk.Label(self.root, text='File Cloud Upload', font=("Helvetica", 16, "bold"), fg="black", bg="#f7f7f7")
         title_lbl.grid(row=0, column=0, columnspan=8, sticky="news")
 
-        s3_bucket_lbl = tk.Label(self.root, text="S3 Bucket Name:", font=("Segoe UI", 12), bg="#f7f7f7")
+        s3_bucket_lbl = tk.Label(self.root, text="S3 Bucket Name:", font=("Helvetica", 12), bg="#f7f7f7")
         s3_bucket_lbl.grid(row=1, column=0, sticky="e")
         
-        self.s3_bucket_entry = ttk.Entry(self.root, font=("Segoe UI", 12))
+        self.s3_bucket_entry = ttk.Entry(self.root, font=("Helvetica", 12))
         self.s3_bucket_entry.grid(row=1, column=1)
 
-        access_key_lbl = tk.Label(self.root, text="Access Key:", font=("Segoe UI", 12), bg="#f7f7f7")
+        access_key_lbl = tk.Label(self.root, text="Access Key:", font=("Helvetica", 12), bg="#f7f7f7")
         access_key_lbl.grid(row=2, column=0, sticky="e")
 
-        self.access_key_entry = ttk.Entry(self.root, font=("Segoe UI", 12))
+        self.access_key_entry = ttk.Entry(self.root, font=("Helvetica", 12))
         self.access_key_entry.grid(row=2, column=1)
 
-        secret_key_lbl = tk.Label(self.root, text="Secret Key:", font=("Segoe UI", 12), bg="#f7f7f7")
+        secret_key_lbl = tk.Label(self.root, text="Secret Key:", font=("Helvetica", 12), bg="#f7f7f7")
         secret_key_lbl.grid(row=3, column=0, sticky="e")
 
-        self.secret_key_entry = ttk.Entry(self.root, font=("Segoe UI", 12))
+        self.secret_key_entry = ttk.Entry(self.root, font=("Helvetica", 12))
         self.secret_key_entry.grid(row=3, column=1)
         
-        file_path_lbl = tk.Label(self.root, text="File Path:", font=("Segoe UI", 12), bg="#f7f7f7")
+        file_path_lbl = tk.Label(self.root, text="File Path:", font=("Helvetica", 12), bg="#f7f7f7")
         file_path_lbl.grid(row=4, column=0, sticky="e")
 
-        self.file_path_entry = ttk.Entry(self.root, font=("Segoe UI", 12))
+        self.file_path_entry = ttk.Entry(self.root, font=("Helvetica", 12))
         self.file_path_entry.grid(row=4, column=1)
 
-        file_name_lbl = tk.Label(self.root, text="File Name:", font=("Segoe UI", 12), bg="#f7f7f7")
+        file_name_lbl = tk.Label(self.root, text="File Name:", font=("Helvetica", 12), bg="#f7f7f7")
         file_name_lbl.grid(row=5, column=0, sticky="e")
 
-        self.file_name_entry = ttk.Entry(self.root, font=("Segoe UI", 12))
+        self.file_name_entry = ttk.Entry(self.root, font=("Helvetica", 12))
         self.file_name_entry.grid(row=5, column=1)
 
-        file_type_lbl = tk.Label(self.root, text="File Type:", font=("Segoe UI", 12), bg="#f7f7f7")
+        file_type_lbl = tk.Label(self.root, text="File Type:", font=("Helvetica", 12), bg="#f7f7f7")
         file_type_lbl.grid(row=6, column=0, sticky="e")
 
-        self.file_type_entry = ttk.Entry(self.root, font=("Segoe UI", 12))
+        self.file_type_entry = ttk.Entry(self.root, font=("Helvetica", 12))
         self.file_type_entry.grid(row=6, column=1)
 
         
         # styling for buttons
         style = ttk.Style()
-        style.configure("TButton", font=("Segoe UI", 12, "bold"))
+        style.configure("TButton", font=("Helvetica", 12, "bold"))
         style.configure("TButton", relief="flat")  # Flat button for modern look
 
         self.holder = tk.Frame(self.root)
@@ -388,6 +388,8 @@ class Cloud:
 
         upload = tk.Button(self.holder, text="Upload", command=self.upload_clicked)
         upload.grid(row=0,column=2)
+
+        create_directory(self.root, 8)
 
     # button click functions
     def loadFile_clicked(self):
