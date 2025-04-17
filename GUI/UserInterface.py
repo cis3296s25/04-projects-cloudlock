@@ -248,8 +248,9 @@ class FileEncryption:
 
     def create_buttons(self):
         btn1 = tk.Button(self.holder, text="ENCRYPT", fg="white", bg="#007BFF", font=("Helvetica", 12, "bold"), command= lambda : self.encrypt_clicked(), relief="raised", bd=2)
-
-        btn1.grid(row=self.row_count,columnspan=5)
+        btn2 = tk.Button(self.holder, text="DECRYPT", fg="white", bg="#007BFF", font=("Helvetica", 12, "bold"), command= lambda : self.decrypt_clicked(), relief="raised", bd=2)
+        btn1.grid(row=self.row_count, column=0, columnspan=2)
+        btn2.grid(row=self.row_count, column=1, columnspan=2)
         self.row_count += 1
 
         create_directory(self.root, self.row_count)
@@ -282,6 +283,10 @@ class FileEncryption:
             self.callback()
 
         print("Encrypted file saved to: ", file_path)
+
+    def decrypt_clicked(self):
+
+        print("Decrypt button clicked")
 
     def home_clicked(self, **kwargs):
         if self.home_callback != None:
