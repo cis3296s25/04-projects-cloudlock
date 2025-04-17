@@ -48,11 +48,14 @@ def get_secret_key(name_of_user):
         return randomized_code
 
 def authenticate_acct(name_of_user, secret_key):
-    authentication_link = pyotp.totp.TOTP(secret_key).provisioning_uri(name_of_user,"CloudLockTeam")
+    # Include the issuer parameter for better compatibility with Microsoft Authenticator
+    authentication_link = pyotp.totp.TOTP(secret_key).provisioning_uri(
+        name_of_user, issuer_name="CloudLockTeam"
+    )
     #name_of_user is their google authenticator username and CloudLockTeam is the name of the issuer
     #creates the account for the user that is connected to the secret_key
-    #print(authentication_link)
 
+    #print(authentication_link)
     return authentication_link
 
 def create_one_time_password(secret_key):

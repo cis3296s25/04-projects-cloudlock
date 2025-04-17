@@ -77,7 +77,7 @@ def hybrid_encrypt(input_file_path):
     print(f"Encrypted AES key saved to: {encrypted_key_path}")
     end_time = time.time()
 
-    if(os.path.isfile(encrypted_file_path)):
+    if os.path.isfile(encrypted_file_path):
         #if the file was successfully made
         return True
     else:
@@ -124,12 +124,22 @@ def hybrid_decrypt(input_file_path,output_file_path):
 
     print(f"Decrypted file saved to: {output_file_path}")
     end_time = time.time()
-    return decrypted_data
+
+    #Verify the success of decryption
+    if os.path.isfile(output_file_path):
+
+        #if successfully decrypted, delete the encrypted file and key
+        os.remove(encrypted_file_path)
+        os.remove(encrypted_key_path)
+
+        return True
+    else:
+        return False
 
 def aes_time():
     total_time = (1000*end_time) - (1000*start_time)
 
-    return int(total_time) #this is ms!!!
+    return str(int(total_time)) + "ms" #this is ms!!!
 
 if __name__ == "__main__":
     file_to_encrypt = select_file("*")
