@@ -53,7 +53,7 @@ def authenticate_acct(name_of_user, secret_key):
     #creates the account for the user that is connected to the secret_key
     print(authentication_link)
 
-    qrcode.make(authentication_link).save("./Images/qr-code.png")
+    return authentication_link
 
 def create_one_time_password(secret_key):
     #creates the link for the time-based password based on the secret-key connected to the user
