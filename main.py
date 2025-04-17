@@ -17,10 +17,10 @@ holder.columnconfigure(0, weight=1)
 holder.rowconfigure(0, weight=1)
 holder.grid(sticky="news")
 
-# ui.QrView(root)
+ui.QrView(root)
 # ui.TokenView(root)
 # ui.FileEncryption(root)
 # ui.DownloadView(root)
-ui.Cloud(root)
+# ui.Cloud(root)
 
 root.mainloop()
