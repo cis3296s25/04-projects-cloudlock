@@ -255,14 +255,14 @@ class FileEncryption:
 
         create_directory(self.root, self.row_count)
 
-    def success_window(self):
+    def success_window(self,encrypt_or_decrypt):
         # TODO: hybrid_encrypt() and decrypt() return Boolean for success
         top = Toplevel(self.root)
         top.geometry("500x200")
         top.title("Success")
         time_taken = aes_time()
         Label(top, text=("Time taken: " + time_taken), font=("Tk Default Font", 12)).place(x=150, y=50)
-        Label(top, text=("File encrypted: " + self.name.get()), font=("Tk Default Font", 12)).place(x=150, y=100)
+        Label(top, text=("File " + encrypt_or_decrypt + ": " + self.name.get()), font=("Tk Default Font", 12)).place(x=150, y=100)
 
     def encrypt_clicked(self):
         #get the file path from the entry
@@ -276,10 +276,7 @@ class FileEncryption:
         #call hybrid_encrypt method
         if(hybrid_encrypt(file_path)):
             print("Successfully enrcypted")
-            self.success_window()
-
-        if self.encrypt_callback != None:
-            self.callback()
+            self.success_window("encrypted")
 
         print("Encrypted file saved to: ", file_path)
 
@@ -303,7 +300,7 @@ class FileEncryption:
         #call hybrid_decrypt method
         if(hybrid_decrypt(file_path, save_path)):
             print("Successfully decrypted")
-            self.success_window()
+            self.success_window("decrypted")
 
         print("Decrypt button clicked")
 
@@ -329,22 +326,19 @@ class DownloadView:
 
         create_directory(parent, 5)
 
-
-
-
 def create_directory(root, row_count):
         holder = tk.Frame(root)
         holder.grid(row=row_count, columnspan=5, sticky="ews")
 
-        for x in range(2):
+        for x in range(3):
             holder.columnconfigure(x, weight=1)
 
-        tk.Button(holder, text="Upload", fg="white", bg=f"{"#28a745" if current_name == "" else "#28a745"}", font=("Helvetica", 12, "bold"),
+        tk.Button(holder, text="Encrypt/Decrypt", fg="white", bg=f"{"#28a745" if current_name == "" else "#28a745"}", font=("Helvetica", 12, "bold"),
                   relief="raised", bd=2, command= lambda : changeView(root, FileEncryption)).grid(column=0, row=0, sticky="we")
         tk.Button(holder, text="Download", fg="white", bg="#28a745", font=("Helvetica", 12, "bold"),
                   relief="raised", bd=2, command= lambda : changeView(root, DownloadView)).grid(row=0, column=1, sticky="we")
-        
-        
+        tk.Button(holder, text="Cloud", fg="white", bg="#28a745", font=("Helvetica", 12, "bold"),
+                  relief="raised", bd=2, command= lambda : changeView(root, Cloud)).grid(row=0, column=2, sticky="we")
         row_count += 1
 
 class Cloud:
