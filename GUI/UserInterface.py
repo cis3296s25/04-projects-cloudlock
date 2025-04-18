@@ -408,7 +408,13 @@ class Cloud:
         filePath = self.file.get()
 
         setAws(bucket, accessKey, secretKey)
-        #uploadS3(filePath)
-
-        print("Upload button clicked")
+        
+        if not filePath:
+            print("No file selected.")
+            return
+        
+        rawFilePath = r"{}".format(filePath)
+        fileKey = self.name.get()
+        if uploadS3(rawFilePath, fileKey):
+            print("Successfully uploaded", fileKey)
 
