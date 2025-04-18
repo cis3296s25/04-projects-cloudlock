@@ -43,7 +43,7 @@ def setAws(bucket_name, access_key, secret_key):
         with open(AWS_KEY_PATH, "w") as awsKeyFile:
             json.dump(data, awsKeyFile, indent=4)
 
-def uploadS3(file_path):
+def uploadS3(file_path, file_key):
     try:
         if os.path.exists(AWS_KEY_PATH):
             with open(AWS_KEY_PATH, 'r') as awsKeyFile:
@@ -52,7 +52,7 @@ def uploadS3(file_path):
             bucket_client.upload_file(
                 Filename=file_path,
                 Bucket=data['bucket_name'],
-                Key=file_path
+                Key=file_key
             )
         else: 
             print("Aws credentials not established")
