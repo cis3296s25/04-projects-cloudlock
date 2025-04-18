@@ -27,7 +27,11 @@ class QrView:
         self.name = "qrview"
         current_name = self.name # Set the current frame name to qrview
         self.root = parent
-        self.username = StringVar(self.root)
+        if(global_username):
+            username = global_username
+        else:
+            username = ""
+        self.username = StringVar(self.root, username)
 
         # Configure rows' weights
         for x in range(9):
@@ -35,12 +39,13 @@ class QrView:
             self.root.columnconfigure(x,weight=1)
 
         # Add the elements to prompt the user to scan the generated QR image
-        tk.Label(parent, text="2FA GENERATION", font=("TkDefaultFont", 18)).grid(row=0,column=0)
-        tk.Label(parent, text="Microsoft Authentication Username", font=("TkDefaultFont", 18)).grid(row=4,column=0)
-        tk.Entry(parent, textvariable=self.username, font=("TkDefaultFont", 12)).grid(row=5, column=0)
+        tk.Label(parent, text="2FA GENERATION", font=("TkDefaultFont", 18)).grid(row=0,column=0, columnspan=6, sticky="news")
 
-        self.qrImage = tk.Label(self.root, width=2, height=2)
-        self.qrImage.grid(column=0, row=1, sticky="news")
+        self.qrImage = tk.Label(self.root)
+        self.qrImage.grid(row=1, column=0, rowspan=2, columnspan=6, sticky="news")
+
+        tk.Label(parent, text="Microsoft Authentication Username", font=("TkDefaultFont", 12)).grid(row=3,column=0, columnspan=6, sticky="news")
+        tk.Entry(parent, textvariable=self.username, font=("TkDefaultFont", 12)).grid(row=4, column=0, columnspan=6, sticky="n")
 
         self.generate_widget = tk.Button(parent, text="Generate QR", width="20", command=lambda: self.Generate_Event())
         self.generate_widget.grid(row=7, column=0, sticky="n")
