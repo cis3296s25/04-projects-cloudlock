@@ -14,38 +14,49 @@ BASE_DIR = os.path.dirname(__file__)
 AWS_DIR = os.path.join(BASE_DIR, "AwsCredentials")
 AWS_KEY_PATH = os.path.join(AWS_DIR, "credentials.json")
 
-def connectAWS():
-    if os.path.exists(AWS_DIR):
-        print("Directory 'AwsCredentials' already established.")
-    else:
+def setAws(bucket_name, access_key, secret_key):
+    if not os.path.exists(AWS_DIR):
         os.makedirs(AWS_DIR)
         print("Directory 'AwsCrendentials' created.")
     
     if os.path.exists(AWS_KEY_PATH):
-        print("Aws credentials already established")
-        # testing json file read
-        with open(AWS_KEY_PATH, 'r') as awsKeyFile:
-            data = json.load(awsKeyFile)
-        print("Aws Access Key: ", data["aws_access_key_id"])
+        if len(bucket_name) != 0:
+            with open(AWS_KEY_PATH, 'r') as awsKeyFile:
+                data = json.load(awsKeyFile)
+            data['bucket_name'] = bucket_name
+            with open(AWS_KEY_PATH, 'w') as awsKeyFile:
+                json.dump(data, awsKeyFile, indent=4)
+        if len(access_key) != 0:
+            with open(AWS_KEY_PATH, 'r') as awsKeyFile:
+                data = json.load(awsKeyFile)
+            data['aws_access_key_id'] = access_key
+            with open(AWS_KEY_PATH, 'w') as awsKeyFile:
+                json.dump(data, awsKeyFile, indent=4)
+        if len(secret_key) != 0:
+            with open(AWS_KEY_PATH, 'r') as awsKeyFile:
+                data = json.load(awsKeyFile)
+            data['aws_secret_key_id'] = secret_key
+            with open(AWS_KEY_PATH, 'w') as awsKeyFile:
+                json.dump(data, awsKeyFile, indent=4)
     else:
-        data = {'aws_access_key_id': AWS_ACCESS_KEY_ID, 'aws_secret_key_id': AWS_SECRET_ACCESS_KEY}
+        data = {'bucket_name': bucket_name, 'aws_access_key_id': access_key, 'aws_secret_key_id': secret_key}
         with open(AWS_KEY_PATH, "w") as awsKeyFile:
             json.dump(data, awsKeyFile, indent=4)
-        print("Aws key file created")
 
-def upload(file_path, bucket_name, file_key=None):
-    bucket_client = boto3.client('s3', aws_access_key_id=AWS_ACCESS_KEY_ID, aws_secret_access_key=AWS_SECRET_ACCESS_KEY)
-
-    # file_key = what will show in s3
-    if file_key is None:
-        file_key = file_path
-
+def uploadS3(file_path, file_key):
     try:
-        bucket_client.upload_file(
-            Filename=file_path,
-            Bucket=bucket_name,
-            Key=file_key
-        )
+        if os.path.exists(AWS_KEY_PATH):
+            with open(AWS_KEY_PATH, 'r') as awsKeyFile:
+                data = json.load(awsKeyFile)
+            bucket_client = boto3.client('s3', aws_access_key_id=data['aws_access_key_id'], aws_secret_access_key=data['aws_secret_key_id'])
+            bucket_client.upload_file(
+                Filename=file_path,
+                Bucket=data['bucket_name'],
+                Key=file_key
+            )
+        else: 
+            print("Aws credentials not established")
+            return False
     except ClientError as e:
         logging.error(e)
         return False
@@ -53,7 +64,7 @@ def upload(file_path, bucket_name, file_key=None):
 
 if __name__ == '__main__':
     # testing Aws Crendential establishment
-    connectAWS()
+    setAws()
     # testing file upload 
-    #upload(r"C:\Users\absei\OneDrive\Documents\cs3296\Final Project\s3FileTest1.txt", "templecloudlockbucket")
+    #uploadS3(r"C:\Users\absei\OneDrive\Documents\cs3296\Final Project\s3FileTest1.txt")
     print("Cloud_Connect main")

@@ -5,6 +5,7 @@ from tkinter import *
 from PIL import ImageTk, Image
 from BackEnd.Microsoft_Auth import *
 from BackEnd.hybrid_crypto import *
+from BackEnd.Cloud_Connect import *
 import BackEnd.file_search as fs
 import BackEnd.file_process as fp
 import BackEnd.Generate_Qr as qr
@@ -13,7 +14,6 @@ global_image_list = {} # global image object to avoid the garbage collection
 current_name = None
 global_username = ""
 global_secret_key = ""
-
 
 def changeView(root : tk.Frame, view):
     for child in root.winfo_children():
@@ -34,7 +34,7 @@ class QrView:
         self.username = StringVar(self.root, username)
 
         # Configure rows' weights
-        for x in range(6):
+        for x in range(9):
             self.root.rowconfigure(x,weight=1, uniform="row")
             self.root.columnconfigure(x,weight=1)
 
@@ -48,7 +48,7 @@ class QrView:
         tk.Entry(parent, textvariable=self.username, font=("TkDefaultFont", 12)).grid(row=4, column=0, columnspan=6, sticky="n")
 
         self.generate_widget = tk.Button(parent, text="Generate QR", width="20", command=lambda: self.Generate_Event())
-        self.generate_widget.grid(row=5, column=0, columnspan=6, sticky="n")
+        self.generate_widget.grid(row=7, column=0, sticky="n")
 
         # If we already have a stored image, load it back
         if "QrImage" in global_image_list:
@@ -85,10 +85,8 @@ class QrView:
     def Auth_Create(self):
         self.generate_widget.destroy()
         holder = tk.Frame(self.root)
-        holder.grid(row=5, column=0, columnspan=6, sticky="s")
-        tk.Button(holder, text="Authenticate Code", command=lambda: self.Auth_Event()).grid(row=0, column=0, pady=5)
-        tk.Button(holder, text="Generate New Code", command=lambda: self.Generate_Event()).grid(row=1, column=0, pady=5)
-
+        holder.grid(row=8, column=0, sticky="n")
+        tk.Button(holder, text="Authenticate Code", width="20", command=lambda: self.Auth_Event()).grid(row=4, column=0, pady=5)
 
     def Generate_Image(self):
         self.image = qr.QrImage(self.link, self.qrImage)
@@ -107,14 +105,14 @@ class TokenView:
         current_name = self.name
 
         # Configure rows' and columns' weights
-        for x in range(0,5):
+        for x in range(9):
             parent.rowconfigure(x,weight=1)
             parent.columnconfigure(x, weight=1)
 
         info_frame = tk.Frame(parent)
         info_frame.grid(row=0, columnspan=5, sticky="ew")
 
-        for x in range(0,5):
+        for x in range(9):
             info_frame.rowconfigure(x,weight=1)
             info_frame.columnconfigure(x, weight=1)
 
@@ -134,7 +132,7 @@ class TokenView:
         loginFrame.grid(row=2, column=2, rowspan=5, sticky="nesw")
         
         # Setup the rows and columns in the loginFrame
-        for x in range(0,5):
+        for x in range(9):
             loginFrame.rowconfigure(x, weight=1)
             loginFrame.columnconfigure(x, weight=1)
 
@@ -168,7 +166,7 @@ class FileEncryption:
         self.name = tk.StringVar()
         self.ext = tk.StringVar()
 
-        for x in range(0,5):
+        for x in range(9):
             parent.rowconfigure(x,weight=1)
             parent.columnconfigure(x, weight=1)
 
@@ -239,7 +237,7 @@ class FileEncryption:
         btn2.grid(row=self.row_count, column=1, columnspan=2)
         self.row_count += 1
 
-        create_directory(self.root, self.row_count)
+        create_directory(self.root, self.row_count+4)
 
     def success_window(self,encrypt_or_decrypt):
         # TODO: hybrid_encrypt() and decrypt() return Boolean for success
@@ -301,7 +299,7 @@ class DownloadView:
     def __init__(self, parent, **kwargs):
         self.row_count = 0
         self.name = "downloadview"
-        for x in range(0,5):
+        for x in range(9):
 
             parent.rowconfigure(x,weight=1)
             parent.columnconfigure(x, weight=1)
@@ -310,7 +308,7 @@ class DownloadView:
         tk.Label(parent, text="Download Cloud Files", font=("Helvetica", 16, "bold"), fg="#333").grid(row=0, column=0, columnspan=5, sticky="news")
         tk.Label(parent, background="#e3d2d1").grid(row=1, rowspan=2,column=0, columnspan=5, sticky="news")
 
-        create_directory(parent, 5)
+        create_directory(parent, 8)
 
 def create_directory(root, row_count):
         holder = tk.Frame(root)
@@ -331,54 +329,65 @@ class Cloud:
     def __init__(self, root):
         self.root = root
         self.root.config(bg="#f7f7f7")  #a lighter background
+        
+        self.file = tk.StringVar()
+        self.name = tk.StringVar()
+        self.ext = tk.StringVar()
 
-        for x in range(8):
+        self.bucket = tk.StringVar()
+        self.accessKey = tk.StringVar()
+        self.secretKey = tk.StringVar()
+
+        for x in range(9):
             self.root.rowconfigure(x, weight=1)
             self.root.columnconfigure(x, weight=1)
 
-        title_lbl = tk.Label(self.root, text='File Cloud Upload', font=("Segoe UI", 22), fg="black", bg="#f7f7f7")
+        title_lbl = tk.Label(self.root, text='File Cloud Upload', font=("Helvetica", 16, "bold"), fg="black", bg="#f7f7f7")
         title_lbl.grid(row=0, column=0, columnspan=8, sticky="news")
 
-        s3_bucket_lbl = tk.Label(self.root, text="S3 Bucket Name:", font=("Segoe UI", 12), bg="#f7f7f7")
+        s3_bucket_lbl = tk.Label(self.root, text="S3 Bucket Name:", font=("Helvetica", 12), bg="#f7f7f7")
         s3_bucket_lbl.grid(row=1, column=0, sticky="e")
         
-        self.s3_bucket_entry = ttk.Entry(self.root, font=("Segoe UI", 12))
-        self.s3_bucket_entry.grid(row=1, column=1)
+        self.s3_bucket_entry = ttk.Entry(self.root, textvariable=self.bucket, font=("Helvetica", 12))
+        self.s3_bucket_entry.grid(row=1, column=1, sticky="ew")
 
-        access_key_lbl = tk.Label(self.root, text="Access Key:", font=("Segoe UI", 12), bg="#f7f7f7")
+        access_key_lbl = tk.Label(self.root, text="Access Key:", font=("Helvetica", 12), bg="#f7f7f7")
         access_key_lbl.grid(row=2, column=0, sticky="e")
 
-        self.access_key_entry = ttk.Entry(self.root, font=("Segoe UI", 12))
-        self.access_key_entry.grid(row=2, column=1)
+        self.access_key_entry = ttk.Entry(self.root, textvariable=self.accessKey, font=("Helvetica", 12))
+        self.access_key_entry.grid(row=2, column=1, sticky="ew")
 
-        secret_key_lbl = tk.Label(self.root, text="Secret Key:", font=("Segoe UI", 12), bg="#f7f7f7")
+        secret_key_lbl = tk.Label(self.root, text="Secret Key:", font=("Helvetica", 12), bg="#f7f7f7")
         secret_key_lbl.grid(row=3, column=0, sticky="e")
 
-        self.secret_key_entry = ttk.Entry(self.root, font=("Segoe UI", 12))
-        self.secret_key_entry.grid(row=3, column=1)
+        self.secret_key_entry = ttk.Entry(self.root, textvariable=self.secretKey, font=("Helvetica", 12))
+        self.secret_key_entry.grid(row=3, column=1, sticky="ew")
         
-        file_path_lbl = tk.Label(self.root, text="File Path:", font=("Segoe UI", 12), bg="#f7f7f7")
+        file_path_lbl = tk.Label(self.root, text="File Path:", font=("Helvetica", 12), bg="#f7f7f7")
         file_path_lbl.grid(row=4, column=0, sticky="e")
 
-        self.file_path_entry = ttk.Entry(self.root, font=("Segoe UI", 12))
-        self.file_path_entry.grid(row=4, column=1)
+        self.file_path_entry = ttk.Entry(self.root, textvariable=self.file, font=("Helvetica", 12))
+        self.file_path_entry.grid(row=4, column=1, sticky="ew")
 
-        file_name_lbl = tk.Label(self.root, text="File Name:", font=("Segoe UI", 12), bg="#f7f7f7")
+        browseFile = tk.Button(self.root, text="Browse", command=self.browseFile_clicked)
+        browseFile.grid(row=4,column=2, sticky="w")
+
+        file_name_lbl = tk.Label(self.root, text="File Name:", font=("Helvetica", 12), bg="#f7f7f7")
         file_name_lbl.grid(row=5, column=0, sticky="e")
 
-        self.file_name_entry = ttk.Entry(self.root, font=("Segoe UI", 12))
-        self.file_name_entry.grid(row=5, column=1)
+        self.file_name_entry = ttk.Entry(self.root, textvariable=self.name, font=("Helvetica", 12))
+        self.file_name_entry.grid(row=5, column=1, sticky="ew")
 
-        file_type_lbl = tk.Label(self.root, text="File Type:", font=("Segoe UI", 12), bg="#f7f7f7")
+        file_type_lbl = tk.Label(self.root, text="File Type:", font=("Helvetica", 12), bg="#f7f7f7")
         file_type_lbl.grid(row=6, column=0, sticky="e")
 
-        self.file_type_entry = ttk.Entry(self.root, font=("Segoe UI", 12))
-        self.file_type_entry.grid(row=6, column=1)
+        self.file_type_entry = ttk.Entry(self.root, textvariable=self.ext, font=("Helvetica", 12))
+        self.file_type_entry.grid(row=6, column=1, sticky="ew")
 
         
         # styling for buttons
         style = ttk.Style()
-        style.configure("TButton", font=("Segoe UI", 12, "bold"))
+        style.configure("TButton", font=("Helvetica", 12, "bold"))
         style.configure("TButton", relief="flat")  # Flat button for modern look
 
         self.holder = tk.Frame(self.root)
@@ -386,22 +395,31 @@ class Cloud:
         for x in range(3):
             self.holder.columnconfigure(x, weight=1)
 
-        loadFile = tk.Button(self.holder, text="Load File", command=self.loadFile_clicked)
-        loadFile.grid(row=0,column=0)
-
-        download = tk.Button(self.holder, text="Download", command=self.download_clicked)
-        download.grid(row=0,column=1)
-
         upload = tk.Button(self.holder, text="Upload", command=self.upload_clicked)
-        upload.grid(row=0,column=2)
+        upload.grid(row=0,column=1)
+
+        create_directory(self.root, 8)
 
     # button click functions
-    def loadFile_clicked(self):
-        print("Load File button clicked")
-
-    def download_clicked(self):
-        print("Download button clicked")
+    def browseFile_clicked(self):
+        self.file.set(fs.select_file(".*"))
+        self.name.set(fp.get_name(self.file.get()))
+        self.ext.set(fp.get_ext(self.file.get()))
 
     def upload_clicked(self):
-        print("Upload button clicked")
+        bucket = self.bucket.get()
+        accessKey = self.accessKey.get()
+        secretKey = self.secretKey.get()
+        filePath = self.file.get()
+
+        setAws(bucket, accessKey, secretKey)
+        
+        if not filePath:
+            print("No file selected.")
+            return
+        
+        rawFilePath = r"{}".format(filePath)
+        fileKey = self.name.get()
+        if uploadS3(rawFilePath, fileKey):
+            print("Successfully uploaded", fileKey)
 
