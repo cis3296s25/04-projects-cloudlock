@@ -2,7 +2,8 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter import *
-from PIL import ImageTk, Image
+from PIL import ImageTk
+import PIL.Image
 from BackEnd.Microsoft_Auth import *
 from BackEnd.hybrid_crypto import *
 from BackEnd.Cloud_Connect import *
@@ -44,8 +45,8 @@ class QrView:
         self.qrImage = tk.Label(self.root)
         self.qrImage.grid(row=1, column=0, rowspan=2, columnspan=6, sticky="news")
 
-        tk.Label(parent, text="Microsoft Authentication Username", font=("TkDefaultFont", 12)).grid(row=3,column=0, columnspan=6, sticky="news")
-        tk.Entry(parent, textvariable=self.username, font=("TkDefaultFont", 12)).grid(row=4, column=0, columnspan=6, sticky="n")
+        tk.Label(parent, text="Microsoft Authentication Username", font=("TkDefaultFont", 12)).grid(row=4,column=0, columnspan=6, sticky="news")
+        tk.Entry(parent, textvariable=self.username, font=("TkDefaultFont", 12)).grid(row=5, column=0, columnspan=6, sticky="n")
 
         self.generate_widget = tk.Button(parent, text="Generate QR", width="20", command=lambda: self.Generate_Event())
         self.generate_widget.grid(row=7, column=0, sticky="n")
@@ -120,7 +121,7 @@ class TokenView:
         tk.Label(info_frame, text="2FA Authentication", font=("TkDefaultFont", 18)).grid(row=0, column=1, sticky="ns")
 
         # Create image using PIL (required for .jpg files)
-        self.image = Image.open("./Images/2fa.jpg")
+        self.image = PIL.Image.open("./Images/2fa.jpg")
         self.image = self.image.resize((300,200))
         self.image= ImageTk.PhotoImage(self.image)
         global_image_list["2fa"] = self.image
