@@ -5,6 +5,7 @@ from tkinter import *
 from PIL import ImageTk, Image
 from BackEnd.Microsoft_Auth import *
 from BackEnd.hybrid_crypto import *
+from BackEnd.Cloud_Connect import *
 import BackEnd.file_search as fs
 import BackEnd.file_process as fp
 import BackEnd.Generate_Qr as qr
@@ -328,6 +329,10 @@ class Cloud:
         self.name = tk.StringVar()
         self.ext = tk.StringVar()
 
+        self.bucket = tk.StringVar()
+        self.accessKey = tk.StringVar()
+        self.secretKey = tk.StringVar()
+
         for x in range(9):
             self.root.rowconfigure(x, weight=1)
             self.root.columnconfigure(x, weight=1)
@@ -338,19 +343,19 @@ class Cloud:
         s3_bucket_lbl = tk.Label(self.root, text="S3 Bucket Name:", font=("Helvetica", 12), bg="#f7f7f7")
         s3_bucket_lbl.grid(row=1, column=0, sticky="e")
         
-        self.s3_bucket_entry = ttk.Entry(self.root, font=("Helvetica", 12))
+        self.s3_bucket_entry = ttk.Entry(self.root, textvariable=self.bucket, font=("Helvetica", 12))
         self.s3_bucket_entry.grid(row=1, column=1, sticky="ew")
 
         access_key_lbl = tk.Label(self.root, text="Access Key:", font=("Helvetica", 12), bg="#f7f7f7")
         access_key_lbl.grid(row=2, column=0, sticky="e")
 
-        self.access_key_entry = ttk.Entry(self.root, font=("Helvetica", 12))
+        self.access_key_entry = ttk.Entry(self.root, textvariable=self.accessKey, font=("Helvetica", 12))
         self.access_key_entry.grid(row=2, column=1, sticky="ew")
 
         secret_key_lbl = tk.Label(self.root, text="Secret Key:", font=("Helvetica", 12), bg="#f7f7f7")
         secret_key_lbl.grid(row=3, column=0, sticky="e")
 
-        self.secret_key_entry = ttk.Entry(self.root, font=("Helvetica", 12))
+        self.secret_key_entry = ttk.Entry(self.root, textvariable=self.secretKey, font=("Helvetica", 12))
         self.secret_key_entry.grid(row=3, column=1, sticky="ew")
         
         file_path_lbl = tk.Label(self.root, text="File Path:", font=("Helvetica", 12), bg="#f7f7f7")
@@ -397,5 +402,13 @@ class Cloud:
         self.ext.set(fp.get_ext(self.file.get()))
 
     def upload_clicked(self):
+        bucket = self.bucket.get()
+        accessKey = self.accessKey.get()
+        secretKey = self.secretKey.get()
+        filePath = self.file.get()
+
+        setAws(bucket, accessKey, secretKey)
+        #uploadS3(filePath)
+
         print("Upload button clicked")
 
