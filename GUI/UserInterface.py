@@ -42,7 +42,7 @@ class QrView:
         self.qrImage.grid(column=0, row=1, sticky="news")
 
         self.generate_widget = tk.Button(parent, text="Generate QR", width="20", command=lambda: self.Generate_Event())
-        self.generate_widget.grid(row=7, column=0, sticky="n")
+        self.generate_widget.grid(row=7, column=3, sticky="n")
 
         # If we already have a stored image, load it back
         if "QrImage" in global_image_list:
@@ -79,7 +79,7 @@ class QrView:
     def Auth_Create(self):
         self.generate_widget.destroy()
         holder = tk.Frame(self.root)
-        holder.grid(row=8, column=0, sticky="n")
+        holder.grid(row=8, column=3, sticky="n")
         tk.Button(holder, text="Authenticate Code", width="20", command=lambda: self.Auth_Event()).grid(row=4, column=0, pady=5)
 
     def Generate_Image(self):
