@@ -1,5 +1,4 @@
 import pyotp
-import qrcode
 import os
 import json
 # basically, creates a google authentication for name_of_user issued by CloudLockTeam that is then made
@@ -69,8 +68,8 @@ def verify_user_code(user_code, correct_otp):
     return correct_otp.verify(user_code)
 
 if __name__ == "__main__":
-    secret_key = get_secret_key("stellar")
-    authenticate_acct("stellar", secret_key)
+    secret_key = get_secret_key("star")
+    authenticate_acct("star", secret_key)
     qr_key = create_one_time_password(secret_key)
     if verify_user_code(input("Insert a code"), qr_key):
         print("true")
