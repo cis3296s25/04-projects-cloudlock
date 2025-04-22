@@ -174,11 +174,10 @@ class FileEncryption:
 
         self.root = parent
         self.holder = tk.Frame(parent)
-        for x in range(3):
-            self.holder.rowconfigure(x,weight=1)
-            self.holder.columnconfigure(x, weight=1)
+        self.holder.rowconfigure((0,1,2,3,4,5), weight=1)
+        self.holder.columnconfigure((0,1,2), weight=1)
 
-        self.holder.grid(row=1, column=0,columnspan=10,sticky="news")
+        self.holder.grid(row=1, column=0, rowspan=6,columnspan=10,sticky="news")
 
         self.create_title_label()
         self.create_file_path_entry()
@@ -195,11 +194,10 @@ class FileEncryption:
         file_path_entry = tk.Entry(self.holder, textvariable=self.file, font=("Helvetica", 12), bd=2, relief="solid")
         file_path_browse = tk.Button(self.holder, text="Browse", font=("Helvetica", 12), command=lambda : browse())
 
-        file_path_lbl.grid(row=self.row_count, column=0, sticky="e")
-        file_path_entry.grid(row=self.row_count, column=1, sticky="ew")
-        file_path_browse.grid(row=self.row_count, column=2, sticky="w")
+        file_path_lbl.grid(row=0, rowspan=2,column=0, sticky="e")
+        file_path_entry.grid(row=0, rowspan=2,column=1, sticky="ew")
+        file_path_browse.grid(row=0, rowspan=2,column=2, sticky="w")
 
-        self.row_count += 1
         def browse():
             self.file.set(fs.select_file(".*"))
             self.name.set(fp.get_name(self.file.get()))
@@ -209,32 +207,27 @@ class FileEncryption:
         file_name_lbl = tk.Label(self.holder, text="File Name:", font=("Helvetica", 12))
         file_name_entry = tk.Label(self.holder, textvariable=self.name, font=("Helvetica", 12), bd=2, relief="solid")
 
-        file_name_lbl.grid(row=self.row_count, column=0, sticky="e")
-        file_name_entry.grid(row=self.row_count, column=1, sticky="ew")
-
-        self.row_count += 1
+        file_name_lbl.grid(row=2, rowspan=2,column=0, sticky="e")
+        file_name_entry.grid(row=2, rowspan=2,column=1, sticky="ew")
 
     def create_file_key_entry(self):
         file_key_lbl = tk.Label(self.holder, text="File Key:", font=("Helvetica", 12))
         file_key_entry = tk.Entry(self.holder, font=("Helvetica", 12), bd=2, relief="solid")
 
-        file_key_lbl.grid(row=self.row_count, column=0)
-        file_key_entry.grid(row=self.row_count, column=1)
-
-        self.row_count += 1
+        file_key_lbl.grid(row=4, rowspan=2,column=0)
+        file_key_entry.grid(row=4, rowspan=2,column=1)
 
     def create_file_desc_entry(self):
         file_desc_lbl = tk.Label(self.holder, text="File Type:", font=("Helvetica", 12))
         self.file_desc_entry = tk.Label(self.holder, textvariable=self.ext, font=("Helvetica", 12), bd=2, relief="solid")
 
-        file_desc_lbl.grid(row=self.row_count, column=0, sticky="e")
-        self.file_desc_entry.grid(row=self.row_count, column=1, sticky="ew")
+        file_desc_lbl.grid(row=6, rowspan=2,column=0, sticky="e")
+        self.file_desc_entry.grid(row=6, rowspan=2,column=1, sticky="ew")
 
-        self.row_count += 1
 
     def create_buttons(self):
         buttonholder = tk.Frame(self.root)
-        buttonholder.grid(row=3,columnspan=10)
+        buttonholder.grid(row=8,columnspan=10)
         buttonholder.columnconfigure(0, weight=1)
         buttonholder.columnconfigure(1, weight=1)
     
