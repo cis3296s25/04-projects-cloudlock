@@ -5,7 +5,10 @@ CloudLock is a desktop application that uses secure file and image encryption sy
 ![This is a screenshot.](Images/images.png)
 
 # How to run
+Release:
+Download the zip file, unzip all the files into one directory, run main.exe
 
+Source Code:
 - Windows:
   ```bash
   python -m venv .venv
