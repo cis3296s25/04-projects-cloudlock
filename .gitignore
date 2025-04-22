@@ -5,3 +5,6 @@
 **/CloudExplorer.py.key
 **/EncryptedFiles
 **/authentication_value.json
+/build
+/dist
+main.spec
