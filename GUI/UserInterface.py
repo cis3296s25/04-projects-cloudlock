@@ -1,7 +1,9 @@
 "Collection of classes to display user interface"
+from email import message
 import tkinter as tk
 from tkinter import ttk
 from tkinter import *
+from tkinter import messagebox
 from PIL import ImageTk
 import PIL.Image
 from BackEnd.Microsoft_Auth import *
@@ -40,16 +42,16 @@ class QrView:
             self.root.columnconfigure(x,weight=1)
 
         # Add the elements to prompt the user to scan the generated QR image
-        tk.Label(parent, text="2FA GENERATION", font=("TkDefaultFont", 18)).grid(row=0,column=0, columnspan=6, sticky="news")
+        tk.Label(parent, text="2FA GENERATION", font=("TkDefaultFont", 18)).grid(row=0,column=0, columnspan=10, sticky="news")
 
         self.qrImage = tk.Label(self.root)
-        self.qrImage.grid(row=1, column=0, rowspan=2, columnspan=6, sticky="news")
+        self.qrImage.grid(row=1, column=0, rowspan=4, columnspan=10, sticky="news")
 
-        tk.Label(parent, text="Microsoft Authentication Username", font=("TkDefaultFont", 12)).grid(row=4,column=0, columnspan=6, sticky="news")
-        tk.Entry(parent, textvariable=self.username, font=("TkDefaultFont", 12)).grid(row=5, column=0, columnspan=6, sticky="n")
+        tk.Label(parent, text="Microsoft Authentication Username", font=("TkDefaultFont", 12)).grid(row=5,column=0, columnspan=10, sticky="news")
+        tk.Entry(parent, textvariable=self.username, font=("TkDefaultFont", 12)).grid(row=6, column=0, columnspan=10, sticky="n")
 
         self.generate_widget = tk.Button(parent, text="Generate QR", width="20", command=lambda: self.Generate_Event())
-        self.generate_widget.grid(row=7, column=3, sticky="n")
+        self.generate_widget.grid(row=7, columnspan=10, sticky="n")
 
         # If we already have a stored image, load it back
         if "QrImage" in global_image_list:
@@ -69,6 +71,7 @@ class QrView:
         # Check if username is empty and print error if it is
         if not username:
             print("Username cannot be empty")
+            messagebox.showerror(self.root, message="Username cannot be empty")
             return
         
         # Set the global username and retrieve the secret key for this user
@@ -85,9 +88,7 @@ class QrView:
 
     def Auth_Create(self):
         self.generate_widget.destroy()
-        holder = tk.Frame(self.root)
-        holder.grid(row=8, column=3, sticky="n")
-        tk.Button(holder, text="Authenticate Code", width="20", command=lambda: self.Auth_Event()).grid(row=4, column=0, pady=5)
+        tk.Button(self.root, text="Authenticate Code", width="20", command=lambda: self.Auth_Event()).grid(row=7, column=0, columnspan=10, sticky="n")
 
     def Generate_Image(self):
         self.image = qr.QrImage(self.link, self.qrImage)
@@ -106,19 +107,20 @@ class TokenView:
         current_name = self.name
 
         # Configure rows' and columns' weights
-        for x in range(9):
+        for x in range(10):
             parent.rowconfigure(x,weight=1)
             parent.columnconfigure(x, weight=1)
 
         info_frame = tk.Frame(parent)
-        info_frame.grid(row=0, columnspan=5, sticky="ew")
+        info_frame.grid(row=0, columnspan=10, sticky="ew")
 
-        for x in range(9):
+        for x in range(5):
             info_frame.rowconfigure(x,weight=1)
             info_frame.columnconfigure(x, weight=1)
 
         tk.Button(info_frame, text="Back", command= lambda : changeView(self.root_frame, QrView)).grid(row=0, column=0, sticky="nw")
-        tk.Label(info_frame, text="2FA Authentication", font=("TkDefaultFont", 18)).grid(row=0, column=1, sticky="ns")
+        tk.Label(info_frame, text="2FA Authentication", font=("TkDefaultFont", 18)).grid(row=0, column=1, columnspan=2,sticky="ns")
+
 
         # Create image using PIL (required for .jpg files)
         self.image = PIL.Image.open("./Images/2fa.jpg")
@@ -126,25 +128,22 @@ class TokenView:
         self.image= ImageTk.PhotoImage(self.image)
         global_image_list["2fa"] = self.image
 
-        tk.Label(parent, image=self.image).grid(row=1, column=0, columnspan=5)
+        tk.Label(parent, image=self.image).grid(row=1, rowspan=4,column=0, columnspan=10, sticky="news")
 
         # Create another frame to hold the information
         loginFrame = tk.Frame(parent)
-        loginFrame.grid(row=2, column=2, rowspan=5, sticky="nesw")
+        loginFrame.grid(row=5, column=4, rowspan=10, sticky="news")
         
         # Setup the rows and columns in the loginFrame
-        for x in range(9):
+        for x in range(2):
             loginFrame.rowconfigure(x, weight=1)
             loginFrame.columnconfigure(x, weight=1)
 
-        tk.Label(loginFrame, text="2FA - Token", font=("TkDefaultFont", 12)).grid(column=0, row=1)
-        tk.Entry(loginFrame, textvariable=self.qrCode, font=("TkDefaultFont", 12)).grid(column=1, row=1)
+        tk.Label(loginFrame, text="2FA - Token", font=("TkDefaultFont", 12)).grid(column=0, row=0)
+        tk.Entry(loginFrame, textvariable=self.qrCode, font=("TkDefaultFont", 12)).grid(column=1, row=0)
+        # entry.bind("<Return>", self.button_clicked_verify)
 
-        entry = tk.Entry(loginFrame, textvariable=self.qrCode, font=("TkDefaultFont", 12))
-        entry.grid(column=1, row=1)
-        entry.bind("<Return>", self.button_clicked_verify)
-
-        tk.Button(loginFrame, text="Log In", font=("TkDefaultFont", 12), command= lambda : self.button_clicked_verify(None)).grid(column=0, row=2, columnspan=2)
+        tk.Button(parent, text="Log In", font=("TkDefaultFont", 12), command= lambda : self.button_clicked_verify(None)).grid(column=4, row=8, columnspan=2)
 
     def button_clicked_verify(self, event):
         str_qrcode = self.qrCode.get()
@@ -154,6 +153,8 @@ class TokenView:
         if(success_or_not): #take the code inout by user, compare it to TOTP created
             print("Correct code!")
             changeView(self.root_frame, FileEncryption)
+        else:
+            messagebox.showerror(self.root_frame, message="Invalid code!")
 
     def __del__(self):
         del self.image
@@ -162,12 +163,12 @@ class FileEncryption:
     def __init__(self, parent):
         self.row_count = 0
         self.name = "fileencryption"
-
+        
         self.file = tk.StringVar()
         self.name = tk.StringVar()
         self.ext = tk.StringVar()
 
-        for x in range(9):
+        for x in range(10):
             parent.rowconfigure(x,weight=1)
             parent.columnconfigure(x, weight=1)
 
@@ -177,7 +178,7 @@ class FileEncryption:
             self.holder.rowconfigure(x,weight=1)
             self.holder.columnconfigure(x, weight=1)
 
-        self.holder.grid(row=1, column=0,columnspan=5,sticky="news")
+        self.holder.grid(row=1, column=0,columnspan=10,sticky="news")
 
         self.create_title_label()
         self.create_file_path_entry()
@@ -187,11 +188,11 @@ class FileEncryption:
 
     def create_title_label(self):
         title_lbl = tk.Label(self.root, text='File Encryption System', font=("Helvetica", 16, "bold"), fg="#333")
-        title_lbl.grid(row=0, column=0, columnspan=5, sticky="news")
+        title_lbl.grid(row=0, column=0, columnspan=10, sticky="news")
     
     def create_file_path_entry(self):
         file_path_lbl = tk.Label(self.holder, text="File Path:", font=("Helvetica", 12))
-        file_path_entry = tk.Entry(self.holder, textvariable=self.file, font=("Helvetica", 12), bd=2, relief="solid", width=20)
+        file_path_entry = tk.Entry(self.holder, textvariable=self.file, font=("Helvetica", 12), bd=2, relief="solid")
         file_path_browse = tk.Button(self.holder, text="Browse", font=("Helvetica", 12), command=lambda : browse())
 
         file_path_lbl.grid(row=self.row_count, column=0, sticky="e")
@@ -206,7 +207,7 @@ class FileEncryption:
 
     def create_file_name_entry(self):
         file_name_lbl = tk.Label(self.holder, text="File Name:", font=("Helvetica", 12))
-        file_name_entry = tk.Label(self.holder, textvariable=self.name, font=("Helvetica", 12), bd=2, relief="solid", width=20)
+        file_name_entry = tk.Label(self.holder, textvariable=self.name, font=("Helvetica", 12), bd=2, relief="solid")
 
         file_name_lbl.grid(row=self.row_count, column=0, sticky="e")
         file_name_entry.grid(row=self.row_count, column=1, sticky="ew")
@@ -232,13 +233,19 @@ class FileEncryption:
         self.row_count += 1
 
     def create_buttons(self):
-        btn1 = tk.Button(self.holder, text="ENCRYPT", fg="white", bg="#007BFF", font=("Helvetica", 12, "bold"), command= lambda : self.encrypt_clicked(), relief="raised", bd=2)
-        btn2 = tk.Button(self.holder, text="DECRYPT", fg="white", bg="#007BFF", font=("Helvetica", 12, "bold"), command= lambda : self.decrypt_clicked(), relief="raised", bd=2)
-        btn1.grid(row=self.row_count, column=0, columnspan=2)
-        btn2.grid(row=self.row_count, column=1, columnspan=2)
+        buttonholder = tk.Frame(self.root)
+        buttonholder.grid(row=3,columnspan=10)
+        buttonholder.columnconfigure(0, weight=1)
+        buttonholder.columnconfigure(1, weight=1)
+    
+        btn1 = tk.Button(buttonholder, text="ENCRYPT", fg="white", bg="#007BFF", font=("Helvetica", 12, "bold"), command= lambda : self.encrypt_clicked(), relief="raised")
+        btn2 = tk.Button(buttonholder, text="DECRYPT", fg="white", bg="#007BFF", font=("Helvetica", 12, "bold"), command= lambda : self.decrypt_clicked(), relief="raised")
+
+        btn1.grid(row=0, column=0)
+        btn2.grid(row=0, column=1)
         self.row_count += 1
 
-        create_directory(self.root, self.row_count+4)
+        create_directory(self.root)
 
     def success_window(self,encrypt_or_decrypt):
         # TODO: hybrid_encrypt() and decrypt() return Boolean for success
@@ -295,36 +302,17 @@ class FileEncryption:
         # Placeholder for home button logic
         print("Home button clicked")
 
-class DownloadView:
-    """Accepts: home_callback, encryption_callback"""
-    def __init__(self, parent, **kwargs):
-        self.row_count = 0
-        self.name = "downloadview"
-        for x in range(9):
-
-            parent.rowconfigure(x,weight=1)
-            parent.columnconfigure(x, weight=1)
-
-        self.root = parent
-        tk.Label(parent, text="Download Cloud Files", font=("Helvetica", 16, "bold"), fg="#333").grid(row=0, column=0, columnspan=5, sticky="news")
-        tk.Label(parent, background="#e3d2d1").grid(row=1, rowspan=2,column=0, columnspan=5, sticky="news")
-
-        create_directory(parent, 8)
-
-def create_directory(root, row_count):
+def create_directory(root):
         holder = tk.Frame(root)
-        holder.grid(row=row_count, columnspan=5, sticky="ews")
+        holder.grid(row=10, column=0,columnspan=10, sticky="news")
 
-        for x in range(3):
+        for x in range(2):
             holder.columnconfigure(x, weight=1)
 
         tk.Button(holder, text="Encrypt/Decrypt", fg="white", bg=f"{"#28a745" if current_name == "" else "#28a745"}", font=("Helvetica", 12, "bold"),
-                  relief="raised", bd=2, command= lambda : changeView(root, FileEncryption)).grid(column=0, row=0, sticky="we")
-        tk.Button(holder, text="Download", fg="white", bg="#28a745", font=("Helvetica", 12, "bold"),
-                  relief="raised", bd=2, command= lambda : changeView(root, DownloadView)).grid(row=0, column=1, sticky="we")
+                  relief="raised", command= lambda : changeView(root, FileEncryption), width=5).grid(row=0, column=0,sticky="news")
         tk.Button(holder, text="Cloud", fg="white", bg="#28a745", font=("Helvetica", 12, "bold"),
-                  relief="raised", bd=2, command= lambda : changeView(root, Cloud)).grid(row=0, column=2, sticky="we")
-        row_count += 1
+                  relief="raised", command= lambda : changeView(root, Cloud), width=5).grid(row=0, column=1,sticky="news")
 
 class Cloud:
     def __init__(self, root):
@@ -339,7 +327,7 @@ class Cloud:
         self.accessKey = tk.StringVar()
         self.secretKey = tk.StringVar()
 
-        for x in range(9):
+        for x in range(10):
             self.root.rowconfigure(x, weight=1)
             self.root.columnconfigure(x, weight=1)
 
@@ -367,7 +355,7 @@ class Cloud:
         file_path_lbl = tk.Label(self.root, text="File Path:", font=("Helvetica", 12), bg="#f7f7f7")
         file_path_lbl.grid(row=4, column=0, sticky="e")
 
-        self.file_path_entry = ttk.Entry(self.root, textvariable=self.file, font=("Helvetica", 12))
+        self.file_path_entry = ttk.Entry(self.root, textvariable=self.file, font=("Helvetica", 12), state="readonly")
         self.file_path_entry.grid(row=4, column=1, sticky="ew")
 
         browseFile = tk.Button(self.root, text="Browse", command=self.browseFile_clicked)
@@ -376,13 +364,13 @@ class Cloud:
         file_name_lbl = tk.Label(self.root, text="File Name:", font=("Helvetica", 12), bg="#f7f7f7")
         file_name_lbl.grid(row=5, column=0, sticky="e")
 
-        self.file_name_entry = ttk.Entry(self.root, textvariable=self.name, font=("Helvetica", 12))
+        self.file_name_entry = ttk.Entry(self.root, textvariable=self.name, font=("Helvetica", 12), state="readonly")
         self.file_name_entry.grid(row=5, column=1, sticky="ew")
 
         file_type_lbl = tk.Label(self.root, text="File Type:", font=("Helvetica", 12), bg="#f7f7f7")
         file_type_lbl.grid(row=6, column=0, sticky="e")
 
-        self.file_type_entry = ttk.Entry(self.root, textvariable=self.ext, font=("Helvetica", 12))
+        self.file_type_entry = ttk.Entry(self.root, textvariable=self.ext, font=("Helvetica", 12), state="readonly")
         self.file_type_entry.grid(row=6, column=1, sticky="ew")
 
         
@@ -396,10 +384,10 @@ class Cloud:
         for x in range(3):
             self.holder.columnconfigure(x, weight=1)
 
-        upload = tk.Button(self.holder, text="Upload", command=self.upload_clicked)
+        upload = tk.Button(self.holder, text="Upload", fg="white", bg="#007BFF" , font=("Helvetica", 12, "bold"), command=self.upload_clicked)
         upload.grid(row=0,column=1)
 
-        create_directory(self.root, 8)
+        create_directory(self.root)
 
     # button click functions
     def browseFile_clicked(self):
