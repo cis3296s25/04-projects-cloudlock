@@ -12,7 +12,6 @@ from BackEnd.Cloud_Connect import *
 import BackEnd.file_search as fs
 import BackEnd.file_process as fp
 import BackEnd.Generate_Qr as qr
-import BackEnd.Image_Lookup as imageDirectory 
 
 global_image_list = {} # global image object to avoid the garbage collection
 current_name = None
@@ -124,7 +123,7 @@ class TokenView:
 
 
         # Create image using PIL (required for .jpg files)
-        self.image = PIL.Image.open(imageDirectory.resource_path("./Images/2fa.jpg"))
+        self.image = PIL.Image.open("./Images/2fa.jpg")
         self.image = self.image.resize((300,200))
         self.image= ImageTk.PhotoImage(self.image)
         global_image_list["2fa"] = self.image

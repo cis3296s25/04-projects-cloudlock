@@ -13,9 +13,9 @@ root.columnconfigure(0, weight=1)
 root.rowconfigure(0, weight=1)
 root.grid()
 
-ui.QrView(root)
+# ui.QrView(root)
 # ui.TokenView(root)
-# ui.FileEncryption(root)
+ui.FileEncryption(root)
 # ui.Cloud(root)
 
 root.mainloop()
