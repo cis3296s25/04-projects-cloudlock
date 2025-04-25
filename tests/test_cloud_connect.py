@@ -4,7 +4,7 @@ import json
 
 # testing the setAws function - path creation
 def test_setAWS_path():
-    setAws()
+    setAws("", "", "")
     assert os.path.exists(AWS_DIR) == True
 
 # testing the setAws function - bucket name set
