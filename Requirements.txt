@@ -3,4 +3,6 @@ qrcode[pil]
 pyotp
 rsa
 PyCryptodome
+pytest
+pytest-mock
 boto3
